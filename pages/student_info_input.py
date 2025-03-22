@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import hashlib
 import subprocess
 import base64
+import streamlit.components.v1 as components
 
 load_dotenv()
 DB_USERNAME = os.getenv("DB_USERNAME")
@@ -149,6 +150,11 @@ def personal_information(user_id=username):
 
                 conn.commit()
                 st.success("Personal Information Updated!")
+                st.page_link("pages/student_home_page.py", label="Go to Student Personal Information page")
+
+                # Display the HTML as full-page content
+
+                # st.markdown('<meta http-equiv="refresh" content="0; url=./student_home_page.html">', unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"Database error: {e}")
