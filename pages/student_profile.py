@@ -165,6 +165,6 @@ render_field("Email", student["email"])
 
 # Edit Profile Button
 if st.button("Edit Your Student Profile"):
-    st.switch_page("pages/tutor_info_input.py")
+    st.switch_page("pages/student_info_input.py")
 
 st.markdown('</div>', unsafe_allow_html=True)  # End of profile-container
