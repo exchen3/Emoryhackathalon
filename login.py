@@ -13,7 +13,7 @@ load_dotenv()
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 
-schema_name = "ordering_app"
+schema_name = "emoryhackathon"
 engine = create_engine(f"mysql+pymysql://root:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 
 ## TODO: Make login function
@@ -59,9 +59,10 @@ def register():
     new_full_name = st.text_input("Name", key="reg_full_name")
     new_password = st.text_input("Choose a Password", type="password", key="reg_password")
     confirm_password = st.text_input("Confirm Password", type="password", key="confirm_password")
+    new_role = st.selectbox("Select your role", ["Student", "Tutor"])
 
     if st.button("Register"):
-        if not new_username or not new_password or not confirm_password:
+        if not new_username or not new_password or not confirm_password or not new_role:
             st.error("All fields are required.")
             return
         
@@ -89,7 +90,8 @@ def register():
                 conn.execute(insert_query, {
                     "username": new_username,
                     "password": hashed_password,
-                    "user_name": new_full_name 
+                    "user_name": new_full_name,
+                    "role": new_role
                 })
 
                 conn.commit()
