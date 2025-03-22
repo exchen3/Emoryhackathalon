@@ -19,6 +19,7 @@ schema_name = "emoryhackathon"
 
 # Construct the SQLAlchemy engine
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
+
 ## TODO: Make login function
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()

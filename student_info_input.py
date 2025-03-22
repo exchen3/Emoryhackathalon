@@ -83,7 +83,6 @@ def personal_information():
     except Exception as e:
         st.error(f"Database error: {e}")
     
-    
     university: university,
     graduation_year: grad_year,
     major: major,
