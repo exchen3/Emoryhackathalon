@@ -21,7 +21,9 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
         st.switch_page("login.py")
     st.stop()
 
-role = st.session_state.get('role', '') or ''
+if st.session_state["role"] != "Student":
+    st.warning("This site can be only accessed by students.")
+    st.stop()
 
 # Custom CSS (basic styles mimicking your HTML)
 st.markdown("""
@@ -114,10 +116,16 @@ with st.container():
 
     with col_links[1]:
         if st.button("👤 Profile", use_container_width=True):
-            if role == "Student":
-                st.switch_page("pages/student_profile.py")
-            elif role == "Tutor":
-                st.switch_page("pages/tutor_profile.py")
+            if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+                st.warning("Please log in first!")
+                time.sleep(1)
+                st.switch_page("login.py")
+            else:
+                role = st.session_state.get("role")
+                if role == "Student":
+                    st.switch_page("pages/student_profile.py")
+                elif role == "Tutor":
+                    st.switch_page("pages/tutor_profile.py")
 
     with col_links[2]:
         if st.button("🎓 Tutors", use_container_width=True):
