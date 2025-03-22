@@ -19,16 +19,20 @@ schema_name = "emoryhackathon"
 
 # Construct the SQLAlchemy engine
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
+# This engine connects to a MySQL database using the root user, the password retrieved from DB_PASSWORD,
+# and the host from DB_HOST. It specifies the emoryhackathon schema.
+
 ## TODO: Make login function
 def hash_password(password):
+    # encryption
     return hashlib.sha256(password.encode()).hexdigest()
 
 def login():
     st.title("Login")
-
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
     role = st.selectbox("Select your role", ["Student", "Tutor"], key = "role")
+    # key is used to make two widgets unique
 
     if st.button("Login"):
         if not username or not password or not role:
@@ -39,6 +43,8 @@ def login():
 
         try:
                 with engine.connect() as conn:
+                    # Establishes a connection to the database using the SQLAlchemy engine.
+
                     query = text(f"SELECT password FROM {role} WHERE user_id = :username")
                     result = conn.execute(query, {"username": username}).fetchone()
 
@@ -46,6 +52,7 @@ def login():
                         st.success(f"Welcome, {username}!")
 
                         # Store user login state
+                        # custom key-value pair where the key is "logged in" and value is True
                         st.session_state["logged_in"] = True
                         st.session_state["username"] = username
 
@@ -108,10 +115,11 @@ if "logged_in" in st.session_state and st.session_state["logged_in"]:
     st.success(f"Welcome back, {st.session_state['username']}!")
     st.page_link("pages/homepage.py", label="Go to HomePage", icon="🍽️")
 else:
+    # st.tabs() is a Streamlit function that creates multiple tabs
     tab1, tab2 = st.tabs(["Login", "Create a New Account"])
 
     with tab1:
-        login()
+        login() # Calls the login function to display login UI inside this tab
 
     with tab2:
         register()
