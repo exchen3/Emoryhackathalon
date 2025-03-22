@@ -3,11 +3,11 @@ from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
 
-#check the login status
+# Check login status
 if st.session_state["role"] != "Tutor":
     st.warning("This site can be only accessed by tutors.")
     st.stop()
-    
+
 load_dotenv()
 
 schema_name = "emoryhackathon"
@@ -51,35 +51,52 @@ st.title("📌 Tutoring Requests")
 
 requests = get_tutoring_requests(username)
 
+# Categorize requests
+pending_requests = [req for req in requests if req.status == "Pending"]
+accepted_requests = [req for req in requests if req.status == "Accepted"]
+rejected_requests = [req for req in requests if req.status == "Rejected"]
+
+request_categories = {
+    f"🟡 Pending Requests ({len(pending_requests)})": pending_requests,
+    f"🟢 Accepted Requests ({len(accepted_requests)})": accepted_requests,
+    f"🔴 Rejected Requests ({len(rejected_requests)})": rejected_requests,
+}
+
 if not requests:
     st.info("No tutoring requests received yet.")
 else:
-    for req in requests:
-        with st.expander(f"🔹 {req.name} — 📚 {req.major}, 🎓 {req.graduation_year}"):
-            st.markdown(f"""
-            **🏫 University:** {req.university or 'N/A'}  
-            **💼 Employment Status:** {'Employed' if req.employed_status else 'Not Employed'}  
-            **🛠️ Internship Experience:** {'Yes' if req.internships else 'No'}  
-            **🎓 Graduate School Plans:** {'Yes' if req.grad_school else 'No'}  
-            **📊 GPA Range:** {req.gpa_range or 'N/A'}  
-            **📖 Classes Taking:** {req.classes_taking or 'N/A'}  
-            **💡 Bio:** {req.bio or 'N/A'}  
-            **📧 Email:** {req.email or 'N/A'}  
-            """)
+    for category, req_list in request_categories.items():
+        with st.expander(category, expanded=False):
+            if not req_list:
+                st.write("No requests in this category.")
+            else:
+                for req in req_list:
+                    # Display each request as a formatted block instead of an expander
+                    st.markdown("---")
+                    st.markdown(f"### 🔹 {req.name} — 📚 {req.major}, 🎓 {req.graduation_year}")
+                    st.markdown(f"""
+                    **🏫 University:** {req.university or 'N/A'}  
+                    **💼 Employment Status:** {'Employed' if req.employed_status else 'Not Employed'}  
+                    **🛠️ Internship Experience:** {'Yes' if req.internships else 'No'}  
+                    **🎓 Graduate School Plans:** {'Yes' if req.grad_school else 'No'}  
+                    **📊 GPA Range:** {req.gpa_range or 'N/A'}  
+                    **📖 Classes Taking:** {req.classes_taking or 'N/A'}  
+                    **💡 Bio:** {req.bio or 'N/A'}  
+                    **📧 Email:** {req.email or 'N/A'}  
+                    """)
 
-            st.markdown(f"✉️ **Message:** {req.message}")
-            
-            # Status selection dropdown
-            status_options = ["Pending", "Accepted", "Rejected"]
-            selected_status = st.selectbox(
-                "📌 Status:",
-                status_options,
-                index=status_options.index(req.status),
-                key=f"status_{req.request_id}"
-            )
+                    st.markdown(f"✉️ **Message:** {req.message}")
+                    
+                    # Status selection dropdown
+                    status_options = ["Pending", "Accepted", "Rejected"]
+                    selected_status = st.selectbox(
+                        "📌 Status:",
+                        status_options,
+                        index=status_options.index(req.status),
+                        key=f"status_{req.request_id}"
+                    )
 
-            # Update status if changed
-            if selected_status != req.status:
-                update_request_status(req.request_id, selected_status)
-                st.success(f"Status updated to {selected_status}.")
-
+                    # Update status if changed
+                    if selected_status != req.status:
+                        update_request_status(req.request_id, selected_status)
+                        st.success(f"Status updated to {selected_status}.")
