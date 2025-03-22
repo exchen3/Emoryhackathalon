@@ -47,21 +47,7 @@ try:
         query = text(f"SELECT * FROM student WHERE user_id = :username")
         result = conn.execute(query, {"username": username}).fetchone()
 
-        if result and result[0] == hashed_password:
-            st.success(f"Welcome, {username}!")
 
-            # Store user login state
-            st.session_state["logged_in"] = True
-            st.session_state["username"] = username
-            st.session_state["role"] = role
-
-            # Redirect to according info page
-            if role == "Student":
-                st.switch_page("pages/student_info_input.py")
-            elif role == "Tutor":
-                st.switch_page("pages/tutor_info_input.py")
-        else:
-            st.error("Invalid username or password.")
 except Exception as e:
     st.error(f"Database error: {e}")  
 
