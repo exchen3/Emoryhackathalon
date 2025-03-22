@@ -47,7 +47,7 @@ def get_tutors(selected_major):
         return result.fetchall()
 
 # Streamlit UI
-st.title("🎓 Tutor-Student Matching System")
+st.title("🎓 Finding a Tutor")
 
 # 1️⃣ Student selects a major (question category)
 selected_major = st.selectbox("🔍 Select a Major", get_majors(), key="select_major")

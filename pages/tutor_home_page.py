@@ -98,6 +98,5 @@ st.markdown("""
 <div class="hero">
     <h1>Start Your Career Now</h1>
     <p>Personalized experience for every employee, anytime, anywhere.</p>
-    <a href="#" class="hero_cta">Find a Student</a>
 </div>
 """, unsafe_allow_html=True)
