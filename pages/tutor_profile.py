@@ -13,9 +13,6 @@ import base64
 # Set page config
 st.set_page_config(page_title="Tutor Profile", layout="centered")
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
 username = st.session_state["username"]
 
 load_dotenv()
@@ -23,21 +20,19 @@ DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST","localhost")
 schema_name = "emoryhackathon"
+
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
+
 with engine.connect() as conn:
     retrieve_query = text(f"SELECT * FROM tutor WHERE user_id = '{username}'")
     result = conn.execute(retrieve_query).fetchone()
-# TODO: Replace the student with real data retrieval from database
-=======
-=======
->>>>>>> Stashed changes
+
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("Please log in first!")
     st.stop()
 
 # Sample tutor data (replace with your DB query)
->>>>>>> Stashed changes
 tutor = {
     "name": result[2],
     "university": result[3],
@@ -139,4 +134,8 @@ render_field("Grad School", tutor["grad_school"])
 render_field("Email", tutor["email"])
 render_field("Bio", tutor["bio"])
 
-st.markdown('</div>', unsafe_allow_html=True)  # Close container
+if st.button("Edit Your Tutor Profile"):
+    st.page_link("pages/tutor_info_input.py",
+                 label = "Go to Tutor Personal Information page")
+
+st.markdown('</div>', unsafe_allow_html=True)

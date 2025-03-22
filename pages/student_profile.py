@@ -9,31 +9,6 @@ from dotenv import load_dotenv
 import hashlib
 import subprocess
 import base64
-load_dotenv()
-
-DB_USERNAME = os.getenv("DB_USERNAME")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST","localhost")
-
-schema_name = "emoryhackathon"
-print("DEBUG ENV:")
-print("DB_USERNAME =", os.getenv("DB_USERNAME"))
-print("DB_PASSWORD =", os.getenv("DB_PASSWORD"))
-print("DB_HOST =", os.getenv("DB_HOST"))
-# Construct the SQLAlchemy engine
-engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
-
-load_dotenv()
-
-DB_USERNAME = os.getenv("DB_USERNAME")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST","localhost")
-
-schema_name = "emoryhackathon"
-
-# Construct the SQLAlchemy engine
-engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
-username = st.session_state["username"]
 
 load_dotenv()
 
@@ -49,12 +24,11 @@ username = st.session_state["username"]
 
 # Page configuration
 st.set_page_config(page_title="Student Profile", layout="centered")
-<<<<<<< Updated upstream
-username = st.session_state["username"]
+
 retrieve_query = text(f"SELECT * FROM student WHERE user_id = '{username}'")
 with engine.connect() as conn:
     result = conn.execute(retrieve_query).fetchone()
-=======
+
 
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
@@ -84,11 +58,6 @@ try:
 except Exception as e:
     st.error(f"Database error: {e}")  
 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-# TODO: Replace the student with real data retrieval from database
 student = {
     "name": result[2],
     "university": result[3],
@@ -195,6 +164,8 @@ render_field("Bio", student["bio"])
 render_field("Email", student["email"])
 
 # Edit Profile Button
-st.markdown('<a class="edit-btn" href="#">Edit Profile</a>', unsafe_allow_html=True)
+if st.button("Edit Your Student Profile"):
+    st.page_link("pages/student_info_input.py",
+                 label="Go to Student Personal Information page")
 
 st.markdown('</div>', unsafe_allow_html=True)  # End of profile-container
