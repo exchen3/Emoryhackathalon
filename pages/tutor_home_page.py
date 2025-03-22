@@ -13,9 +13,10 @@ import base64
 # Set up page config
 st.set_page_config(page_title="TutorConnect | Learn Better", layout="wide")
 
-# Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("Please log in first!")
+    if st.button("Login Page", use_container_width=True):
+        st.switch_page("login.py")
     st.stop()
 
 # Custom styles using inline CSS
