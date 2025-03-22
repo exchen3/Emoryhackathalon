@@ -3,6 +3,11 @@ from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
 
+#check the login status
+if st.session_state["role"] != "Tutor":
+    st.warning("This site can be only accessed by tutors.")
+    st.stop()
+    
 load_dotenv()
 
 schema_name = "emoryhackathon"
@@ -21,7 +26,7 @@ def get_tutoring_requests(tutor_id):
         query = text("""
         SELECT 
             tr.request_id, tr.student_user_id, tr.`status`, tr.message,
-            s.name, s.major, s.graduation_year
+            s.name, s.university, s.graduation_year, s.major, s.employed_status, s.internships, s.grad_school, s.gpa_range, s.classes_taking, s.bio, s.email 
         FROM requests tr
         JOIN student s ON tr.student_user_id = s.user_id
         WHERE tr.tutor_user_id = :tutor_id;
@@ -51,6 +56,17 @@ if not requests:
 else:
     for req in requests:
         with st.expander(f"🔹 {req.name} — 📚 {req.major}, 🎓 {req.graduation_year}"):
+            st.markdown(f"""
+            **🏫 University:** {req.university or 'N/A'}  
+            **💼 Employment Status:** {'Employed' if req.employed_status else 'Not Employed'}  
+            **🛠️ Internship Experience:** {'Yes' if req.internships else 'No'}  
+            **🎓 Graduate School Plans:** {'Yes' if req.grad_school else 'No'}  
+            **📊 GPA Range:** {req.gpa_range or 'N/A'}  
+            **📖 Classes Taking:** {req.classes_taking or 'N/A'}  
+            **💡 Bio:** {req.bio or 'N/A'}  
+            **📧 Email:** {req.email or 'N/A'}  
+            """)
+
             st.markdown(f"✉️ **Message:** {req.message}")
             
             # Status selection dropdown
