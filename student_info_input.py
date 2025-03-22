@@ -56,18 +56,22 @@ def personal_information():
 
     try:
         with engine.connect() as conn:
-            # Check if username already exists
-            check_query = text("SELECT user_id FROM customers WHERE user_id = :username")
-            existing_user = conn.execute(check_query, {"username": username}).fetchone()
-
-            if existing_user:
-                st.error("Username already exists. Please choose another.")
-                return
-
             # Insert new user
-            insert_query = text("""
+            modify_query = text("""
                 INSERT INTO customers (user_id, password, user_name, favorites, last_visit)
                 VALUES (:username, :password, :user_name, NULL, CURDATE())
+                                
+                UPDATE student
+                SET university = :university, 
+                        graduation_year = :grad_year, 
+                        major = :major, 
+                        employed_status = :employed_status,
+                        internships = :internships, 
+                        grad_school = :grad_school, 
+                        gpa_range = :gpa_range, 
+                        classes_taking = :classes_taking, 
+                        bio = :bio
+                WHERE user_id = :username;
             """)
             conn.execute(insert_query, {
                 "username": new_username,
