@@ -13,12 +13,15 @@ load_dotenv()
 
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_HOST = os.getenv("DB_HOST","localhost")
 
 schema_name = "emoryhackathon"
-
+print("DEBUG ENV:")
+print("DB_USERNAME =", os.getenv("DB_USERNAME"))
+print("DB_PASSWORD =", os.getenv("DB_PASSWORD"))
+print("DB_HOST =", os.getenv("DB_HOST"))
 # Construct the SQLAlchemy engine
-engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
 
 ## TODO: Make login function
 def hash_password(password):
