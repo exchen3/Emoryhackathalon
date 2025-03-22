@@ -57,6 +57,7 @@ def login():
                         st.session_state["username"] = username
                         st.session_state["role"] = role
 
+
                         # Redirect to according info page
                         if role == "Student":
                             check_query = text(
