@@ -111,8 +111,8 @@ def register():
 
 if "logged_in" in st.session_state and st.session_state["logged_in"]:
     st.success(f"Welcome back, {st.session_state['username']}!")
-    print()
-    st.page_link("pages/homepage.py", label="Go to HomePage", icon="🍽️")
+    # TODO: edit this homepage link to get to actual homepage
+    st.page_link("pages/homepage.py", label="Go to HomePage")
 
 else:
     tab1, tab2 = st.tabs(["Login", "Create a New Account"])

@@ -15,7 +15,8 @@ CREATE TABLE tutor (
     grad_school BOOLEAN,
     gpa_range VARCHAR(100),
     classes_teaching VARCHAR(255),
-    bio VARCHAR(1000)
+    bio VARCHAR(1000),
+    email varchar(100)
 );
 
 CREATE TABLE student (
@@ -30,7 +31,8 @@ CREATE TABLE student (
     grad_school BOOLEAN,
     gpa_range VARCHAR(100),
     classes_taking VARCHAR(255),
-    bio VARCHAR(1000)
+    bio VARCHAR(1000),
+    email VARCHAR(100)
 );
 
 select * from emoryhackathon.student;
@@ -38,3 +40,5 @@ select * from emoryhackathon.student;
 CREATE USER 'lisa'@'%' IDENTIFIED BY 'lisa';
 GRANT ALL PRIVILEGES ON emoryhackathon.* TO 'lisa'@'%';
 FLUSH PRIVILEGES;
+
+-- create request tutor_user_id, student_user_id, 
