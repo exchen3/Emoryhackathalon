@@ -135,7 +135,6 @@ render_field("Email", tutor["email"])
 render_field("Bio", tutor["bio"])
 
 if st.button("Edit Your Tutor Profile"):
-    st.page_link("pages/tutor_info_input.py",
-                 label = "Go to Tutor Personal Information page")
+    st.switch_page("pages/student_info_input.py")
 
 st.markdown('</div>', unsafe_allow_html=True)
