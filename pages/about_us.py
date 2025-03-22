@@ -9,22 +9,30 @@ from dotenv import load_dotenv
 import hashlib
 import subprocess
 import base64
+import time
 
 load_dotenv()
 
 # Page setup
 st.set_page_config(page_title="About Us | TutorConnect", layout="wide")
+role = st.session_state['role']
 
 # Page styling
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap');
 
+    .centered-container {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 2rem 1rem;
+    }
+
     html, body, .stApp {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
         background-size: cover;
-        color: #333;
+        color: #ffffff;
     }
 
     .overlay {
@@ -53,12 +61,13 @@ st.markdown("""
     }
 
     .team-card {
-        text-align: center;
-        padding: 2rem 1rem;
-        border-radius: 12px;
-        background: white;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
+    text-align: center;
+    padding: 2rem 1rem;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    color: black; /* 👈 Add this */
     }
 
     .team-card:hover {
@@ -93,25 +102,45 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Navbar
-st.markdown("""
-<div class="navbar">
-    <div><strong>TutorConnect</strong></div>
-    <div>
-        <a href="#">About Us</a>
-        <a href="#">Profile</a>
-        <a href="#">Tutors</a>
-        <a href="#">Subjects</a>
-        <a href="#">Sign Out</a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+def logout():
+    # Clear session state
+    for key in ["logged_in", "username", "role"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    
+    st.success("You have been logged out.")
+    time.sleep(1)
+    st.switch_page("login.py")  # Navigate to login page
 
-# Overlay content
-st.markdown('<div class="overlay">', unsafe_allow_html=True)
+# ---- Navbar ----
+st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
+st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+
+# Use Streamlit's built-in page links for navigation
+with st.container():
+    col_links = st.columns(4)
+
+    with col_links[0]:
+        if st.button("🧭 About Us", use_container_width=True):
+            st.switch_page("pages/about_us.py")
+
+    with col_links[1]:
+        if st.button("👤 Profile", use_container_width=True):
+            if role == "Student":
+                st.switch_page("pages/student_profile.py")
+            elif role == "Tutor":
+                st.switch_page("pages/tutor_profile.py")
+
+    with col_links[2]:
+        if st.button("🎓 Tutors", use_container_width=True):
+            st.switch_page("pages/student_tutor_matching_filtering.py")
+
+    with col_links[3]:
+        if st.button("🚪 Sign Out", use_container_width=True):
+            logout()
 
 st.markdown("""
-<div class="text-center mb-5">
+<div class="centered-container">
     <h1 class="display-4 fw-bold">About <span class="highlight">TutorConnect</span></h1>
     <p class="lead">Empowering education by connecting underrepresented students with qualified, passionate tutors.</p>
 </div>
@@ -120,7 +149,7 @@ st.markdown("""
 # Mission Section
 col1, col2 = st.columns(2)
 with col1:
-    st.image("https://images.unsplash.com/photo-1584697964192-886b60f6c865?auto=format&fit=crop&w=1350&q=80", use_column_width=True)
+    st.image("https://www.spelman.edu/_2-Images/academics/french/french-tutor-2.jpg", use_column_width=True)
 with col2:
     st.markdown('<h2 class="section-title">Our Mission</h2>', unsafe_allow_html=True)
     st.write("At TutorConnect, we believe every student deserves access to quality, personalized education. "
@@ -132,20 +161,20 @@ st.markdown("<br>", unsafe_allow_html=True)
 # Team Section
 col3, col4 = st.columns(2)
 with col4:
-    st.image("https://images.unsplash.com/photo-1581090700227-1f94d44aa8bf?auto=format&fit=crop&w=1350&q=80", use_column_width=True)
+    st.image("https://test-bright.com/main/wp-content/uploads/2015/09/group-tutoring-large.jpg", use_column_width=True)
 with col3:
     st.markdown('<h2 class="section-title">Meet the Team</h2>', unsafe_allow_html=True)
-    st.write("We're a diverse group of students at Emory University passionate about redefining the future of student learning.")
+    st.write("We're a group of students at Emory University passionate about redefining the future of student learning.")
 
 st.markdown("### ", unsafe_allow_html=True)
 
 # Team Members
 cols = st.columns(4)
 team = [
-    {"name": "Eric Chen", "role": "Co-Founder & CEO", "img": "https://randomuser.me/api/portraits/women/68.jpg"},
-    {"name": "Andy Dang", "role": "CTO & Lead Developer", "img": "https://randomuser.me/api/portraits/men/43.jpg"},
-    {"name": "Lisa", "role": "Community Manager", "img": "https://randomuser.me/api/portraits/women/65.jpg"},
-    {"name": "Lynne Zheng", "role": "Outreach Coordinator", "img": "https://randomuser.me/api/portraits/women/65.jpg"},
+    {"name": "Eric Chen", "role": "Developer", "img": "https://randomuser.me/api/portraits/women/68.jpg"},
+    {"name": "Andy Dang", "role": "Developer", "img": "https://randomuser.me/api/portraits/men/43.jpg"},
+    {"name": "Lisa Yang", "role": "Developer", "img": "https://randomuser.me/api/portraits/women/65.jpg"},
+    {"name": "Lynne Zheng", "role": "Developer", "img": "https://randomuser.me/api/portraits/women/65.jpg"},
 ]
 
 for col, member in zip(cols, team):
@@ -153,8 +182,8 @@ for col, member in zip(cols, team):
         st.markdown(f"""
             <div class="team-card">
                 <img src="{member['img']}" alt="{member['name']}"/>
-                <h5 class="fw-bold">{member['name']}</h5>
-                <p class="text-muted">{member['role']}</p>
+                <h5 style="color: #000000;">{member['name']}</h5>
+                <p style="color: #000000;">{member['role']}</p>
             </div>
         """, unsafe_allow_html=True)
 
