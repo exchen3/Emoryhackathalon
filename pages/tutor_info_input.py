@@ -41,7 +41,7 @@ def personal_information(user_id=username):
             result = conn.execute(query, {"username": user_id}).fetchone()
 
             if result:
-                current_info = result._mapping  # ✅ correct way to access row data as dict
+                current_info = result._mapping
             else:
                 st.error("No tutor record found for this user.")
                 return
@@ -112,7 +112,7 @@ def personal_information(user_id=username):
     # Submit updated info
     if st.button("Submit Information"):
         # Check required fields
-        if not university or university == "empty" or not classes_taking or classes_taking == "empty" or not bio or bio == "empty":
+        if not university or university == "empty" or not classes_teaching or classes_teaching == "empty" or not bio or bio == "empty":
             st.warning("Please fill in all required fields.")
             return
 
@@ -149,6 +149,10 @@ def personal_information(user_id=username):
 
                 conn.commit()
                 st.success("Personal Information Updated!")
+                
+                st.page_link("pages/student_info_input.py", label="Go to Student Personal Information page")
+
+                # st.markdown('<meta http-equiv="refresh" content="0; url=http://localhost:8501/student_home_page.html">', unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"Database error: {e}")

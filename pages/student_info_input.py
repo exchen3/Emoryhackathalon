@@ -76,21 +76,6 @@ def personal_information(user_id=username):
         index=majors.index(current_info.get("major")) if current_info.get("major") in majors else 0,
         key="major"
     )
-    employed_status = st.checkbox(
-        "Currently Employed?", 
-        value=bool(current_info.get("employed_status")), 
-        key="employed_status"
-    )
-    internships = st.checkbox(
-        "Have you done any Internships?", 
-        value=bool(current_info.get("internships")), 
-        key="internships"
-    )
-    grad_school = st.checkbox(
-        "Are you currently in Graduate School?", 
-        value=bool(current_info.get("grad_school")), 
-        key="grad_school"
-    )
     gpa_options = ["Below 2.5", "2.5 - 3.0", "3.0 - 3.5", "3.5 - 4.0"]
     gpa_range = st.selectbox(
         "Select your GPA Range (on a scale of 4)", 
@@ -122,10 +107,7 @@ def personal_information(user_id=username):
                     UPDATE student
                     SET university = :university, 
                         graduation_year = :grad_year, 
-                        major = :major, 
-                        employed_status = :employed_status,
-                        internships = :internships, 
-                        grad_school = :grad_school, 
+                        major = :major,
                         gpa_range = :gpa_range, 
                         classes_taking = :classes_taking, 
                         bio = :bio,
@@ -137,9 +119,6 @@ def personal_information(user_id=username):
                     "university": university,
                     "grad_year": grad_year,
                     "major": major,
-                    "employed_status": employed_status,
-                    "internships": internships,
-                    "grad_school": grad_school,
                     "gpa_range": gpa_range,
                     "classes_taking": classes_taking,
                     "bio": bio,
@@ -149,6 +128,11 @@ def personal_information(user_id=username):
 
                 conn.commit()
                 st.success("Personal Information Updated!")
+                st.page_link("pages/student_home_page.py", label="Go to Student Personal Information page")
+
+                # Display the HTML as full-page content
+
+                # st.markdown('<meta http-equiv="refresh" content="0; url=./student_home_page.html">', unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"Database error: {e}")

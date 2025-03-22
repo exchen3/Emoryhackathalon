@@ -56,13 +56,24 @@ def login():
 
                         # Redirect to according info page
                         if role == "Student":
-                            st.switch_page("pages/student_info_input.py")
+                            check_query = text(
+                                f"SELECT email IS NULL FROM student WHERE user_id = '{st.session_state['username']}'")
+
+                            is_empty = conn.execute(check_query).fetchone()
+
+                            if is_empty and is_empty[0]:
+                                st.page_link("pages/student_info_input.py",
+                                             label="Go to Student Personal Information page")
+                            else:
+                                st.page_link("pages/student_home_page.py",
+                                             label="Go to Student Home Page")
                         elif role == "Tutor":
                             st.switch_page("pages/tutor_info_input.py")
                     else:
                         st.error("Invalid username or password.")
         except Exception as e:
-            st.error(f"Database error: {e}")    
+            st.error(f"Database error: {e}")
+
 
 def register():
     st.title("Register New Account")
@@ -114,10 +125,6 @@ def register():
 
 if "logged_in" in st.session_state and st.session_state["logged_in"]:
     st.success(f"Welcome back, {st.session_state['username']}!")
-    if st.session_state['role'] == "Student":
-        st.page_link("pages/student_info_input.py", label="Go to Student Personal Information page")
-    elif st.session_state['role'] == "Tutor":
-        st.page_link("pages/tutor_info_input.py", label="Go to Tutor Personal Information page")
 
 else:
     tab1, tab2 = st.tabs(["Login", "Create a New Account"])
