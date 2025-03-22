@@ -10,12 +10,15 @@ import hashlib
 import subprocess
 
 load_dotenv()
+
+DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 
 schema_name = "emoryhackathon"
-engine = create_engine(f"mysql+pymysql://root:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 
+# Construct the SQLAlchemy engine
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 ## TODO: Make login function
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()

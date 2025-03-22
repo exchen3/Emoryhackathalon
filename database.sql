@@ -34,3 +34,7 @@ CREATE TABLE student (
 );
 
 select * from emoryhackathon.student;
+
+CREATE USER 'lisa'@'%' IDENTIFIED BY 'lisa';
+GRANT ALL PRIVILEGES ON emoryhackathon.* TO 'lisa'@'%';
+FLUSH PRIVILEGES;
