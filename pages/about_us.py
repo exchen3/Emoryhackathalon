@@ -193,12 +193,3 @@ for col, member in zip(cols, team):
                 <p style="color: #000000;">{member['role']}</p>
             </div>
         """, unsafe_allow_html=True)
-
-# Back to home
-st.markdown("""
-<div class="text-center mt-5">
-    <a href="#" class="btn btn-primary btn-lg">Back to Home</a>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)  # close overlay
