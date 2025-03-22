@@ -18,7 +18,7 @@ schema_name = "emoryhackathon"
 engine = create_engine(f"mysql+pymysql://root:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 
 # Set page configuration
-st.set_page_config(page_title="Home", page_icon="🏠", layout="wide")
+st.set_page_config(page_title="Info Input", layout="wide")
 
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
@@ -58,7 +58,7 @@ def personal_information():
         with engine.connect() as conn:
             # Check if username already exists
             check_query = text("SELECT user_id FROM customers WHERE user_id = :username")
-            existing_user = conn.execute(check_query, {"username": new_username}).fetchone()
+            existing_user = conn.execute(check_query, {"username": username}).fetchone()
 
             if existing_user:
                 st.error("Username already exists. Please choose another.")
