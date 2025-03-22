@@ -19,6 +19,9 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
         st.switch_page("login.py")
     st.stop()
 
+if st.session_state["role"] != "Student":
+    st.warning("This site can be only accessed by students.")
+
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST","localhost")
