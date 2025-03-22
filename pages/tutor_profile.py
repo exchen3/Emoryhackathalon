@@ -14,6 +14,7 @@ import base64
 st.set_page_config(page_title="Tutor Profile", layout="centered")
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 username = st.session_state["username"]
 
@@ -28,6 +29,8 @@ with engine.connect() as conn:
     result = conn.execute(retrieve_query).fetchone()
 # TODO: Replace the student with real data retrieval from database
 =======
+=======
+>>>>>>> Stashed changes
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("Please log in first!")

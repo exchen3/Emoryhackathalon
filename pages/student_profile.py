@@ -35,6 +35,18 @@ schema_name = "emoryhackathon"
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
 username = st.session_state["username"]
 
+load_dotenv()
+
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST","localhost")
+
+schema_name = "emoryhackathon"
+
+# Construct the SQLAlchemy engine
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
+username = st.session_state["username"]
+
 # Page configuration
 st.set_page_config(page_title="Student Profile", layout="centered")
 <<<<<<< Updated upstream
@@ -72,6 +84,9 @@ try:
 except Exception as e:
     st.error(f"Database error: {e}")  
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 # TODO: Replace the student with real data retrieval from database
 student = {
