@@ -29,6 +29,13 @@ st.markdown("""
     html, body {
         font-family: 'Kumbh Sans', sans-serif;
     }
+    
+    .center-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    }
+    
     .navbar {
         background-color: #4B7BE5;
         padding: 1rem 2rem;
@@ -127,9 +134,14 @@ st.markdown("""
 <div class="hero">
     <h1>Unlock Your Full Potential</h1>
     <p>Personalized tutoring for every learner, anytime, anywhere.</p>
-    <a href="#" class="hero_cta">Find a Tutor</a>
 </div>
 """, unsafe_allow_html=True)
+
+center_col1, center_col2, center_col3 = st.columns([1, 2, 1])
+
+with center_col2:
+    if st.button("Find a Tutor", use_container_width=True):
+        st.switch_page("pages/find_tutor.py")
 
 # ---- Services Section ----
 st.markdown("<div class='services'><h2 class='section_title'>Our Tutoring Services</h2></div>", unsafe_allow_html=True)
