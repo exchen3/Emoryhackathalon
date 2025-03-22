@@ -53,3 +53,5 @@ CREATE TABLE requests (
     FOREIGN KEY (student_user_id) REFERENCES student(user_id),
     FOREIGN KEY (tutor_user_id) REFERENCES tutor(user_id)
 );
+
+select * from requests;
