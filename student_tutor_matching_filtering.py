@@ -1,9 +1,10 @@
 import streamlit as st
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 from sqlalchemy import create_engine
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # Create a session factory
 schema_name = "emoryhackathon"
@@ -11,16 +12,10 @@ schema_name = "emoryhackathon"
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST", "localhost")
-engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
-SessionLocal = sessionmaker(bind=engine)
 
-def get_db():
-    """Create a new database session."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
+
+# SessionLocal = sessionmaker(bind=engine)
 
 # Fetch available majors
 def get_majors():
