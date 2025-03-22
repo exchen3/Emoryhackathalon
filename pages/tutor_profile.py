@@ -10,20 +10,50 @@ import hashlib
 import subprocess
 import base64
 
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    if st.button("Login Page", use_container_width=True):
+        st.switch_page("login.py")
+    st.stop()
+
+if st.session_state["role"] != "Tutor":
+    st.warning("This site can be only accessed by tutors.")
+    st.stop()
+
 # Set page config
 st.set_page_config(page_title="Tutor Profile", layout="centered")
 
+username = st.session_state["username"]
+
+load_dotenv()
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST","localhost")
+schema_name = "emoryhackathon"
+
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
+
+with engine.connect() as conn:
+    retrieve_query = text(f"SELECT * FROM tutor WHERE user_id = '{username}'")
+    result = conn.execute(retrieve_query).fetchone()
+
+# Ensure user is logged in
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    st.stop()
+
 # Sample tutor data (replace with your DB query)
 tutor = {
-    "name": "Jane Smith",
-    "university": "Georgia Tech",
-    "graduation_year": 2024,
-    "major": "Computer Science",
-    "employed_status": "Yes",
-    "classes_teaching": "Data Structures, Algorithms, Machine Learning",
-    "grad_school": "No",
-    "email": "janesmith@example.com",
-    "bio": "I love helping students understand complex CS topics in simple ways!"
+    "name": result[2],
+    "university": result[3],
+    "graduation_year": result[4],
+    "employed_status": result[6],
+    "grad_school": result[8],
+    "major": result[5],
+    "gpa_range": result[9],
+    "classes_teaching": result[10],
+    "bio": result[11],
+    "email": result[12]
 }
 
 # Custom CSS for background, navbar, and card layout
@@ -114,4 +144,7 @@ render_field("Grad School", tutor["grad_school"])
 render_field("Email", tutor["email"])
 render_field("Bio", tutor["bio"])
 
-st.markdown('</div>', unsafe_allow_html=True)  # Close container
+if st.button("Edit Your Tutor Profile"):
+    st.switch_page("pages/tutor_info_input.py")
+
+st.markdown('</div>', unsafe_allow_html=True)

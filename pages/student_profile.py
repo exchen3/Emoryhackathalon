@@ -10,19 +10,59 @@ import hashlib
 import subprocess
 import base64
 
+load_dotenv()
+
+# Ensure user is logged in
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    if st.button("Login Page", use_container_width=True):
+        st.switch_page("login.py")
+    st.stop()
+
+if st.session_state["role"] != "Student":
+    st.warning("This site can be only accessed by students.")
+
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST","localhost")
+
+schema_name = "emoryhackathon"
+
+# Construct the SQLAlchemy engine
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
+username = st.session_state["username"]
+
 # Page configuration
 st.set_page_config(page_title="Student Profile", layout="centered")
 
-# TODO: Replace the student with real data retrieval from database
+retrieve_query = text(f"SELECT * FROM student WHERE user_id = '{username}'")
+with engine.connect() as conn:
+    result = conn.execute(retrieve_query).fetchone()
+
+
+# Ensure user is logged in
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    st.stop()
+
+try:
+    with engine.connect() as conn:
+        query = text(f"SELECT * FROM student WHERE user_id = :username")
+        result = conn.execute(query, {"username": username}).fetchone()
+
+
+except Exception as e:
+    st.error(f"Database error: {e}")  
+
 student = {
-    "name": "Andy Dang",
-    "university": "Emory University",
-    "graduation_year": 2025,
-    "major": "Business Analytics",
-    "gpa_range": "3.5 - 4.0",
-    "classes_taking": "Machine Learning, Prescriptive Analytics, NLP",
-    "bio": "Passionate about data, education, and making an impact.",
-    "email": "andykhangdang@gmail.com"
+    "name": result[2],
+    "university": result[3],
+    "graduation_year": result[4],
+    "major": result[5],
+    "gpa_range": result[9],
+    "classes_taking": result[10],
+    "bio": result[11],
+    "email": result[12]
 }
 
 # Inject CSS for background and styling
@@ -120,6 +160,7 @@ render_field("Bio", student["bio"])
 render_field("Email", student["email"])
 
 # Edit Profile Button
-st.markdown('<a class="edit-btn" href="#">Edit Profile</a>', unsafe_allow_html=True)
+if st.button("Edit Your Student Profile"):
+    st.switch_page("pages/student_info_input.py")
 
 st.markdown('</div>', unsafe_allow_html=True)  # End of profile-container

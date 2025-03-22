@@ -13,6 +13,12 @@ import base64
 # Set up page config
 st.set_page_config(page_title="TutorConnect | Learn Better", layout="wide")
 
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    if st.button("Login Page", use_container_width=True):
+        st.switch_page("login.py")
+    st.stop()
+
 # Custom styles using inline CSS
 st.markdown("""
     <style>
@@ -93,6 +99,5 @@ st.markdown("""
 <div class="hero">
     <h1>Start Your Career Now</h1>
     <p>Personalized experience for every employee, anytime, anywhere.</p>
-    <a href="#" class="hero_cta">Find a Student</a>
 </div>
 """, unsafe_allow_html=True)

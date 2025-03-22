@@ -9,9 +9,19 @@ from dotenv import load_dotenv
 import hashlib
 import subprocess
 import base64
+import time
 
 # Page config
 st.set_page_config(page_title="TutorConnect | Learn Better", layout="wide")
+
+# Ensure user is logged in
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    if st.button("Login Page", use_container_width=True):
+        st.switch_page("login.py")
+    st.stop()
+
+role = st.session_state.get('role', '') or ''
 
 # Custom CSS (basic styles mimicking your HTML)
 st.markdown("""
@@ -73,19 +83,44 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+def logout():
+    # Clear session state
+    for key in ["logged_in", "username", "role"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    
+    st.success("You have been logged out.")
+    time.sleep(1)
+    st.switch_page("login.py")  # Navigate to login page
+
 # ---- Navbar ----
-st.markdown("""
-<div class="navbar">
-    <div><strong>TutorConnect</strong></div>
-    <div>
-        <a href="#">About Us</a>
-        <a href="#">Profile</a>
-        <a href="#">Tutors</a>
-        <a href="#">Subjects</a>
-        <a href="#">Sign Out</a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
+st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+
+# Use Streamlit's built-in page links for navigation
+with st.container():
+    col_links = st.columns(4)
+
+    with col_links[0]:
+        if st.button("🧭 About Us", use_container_width=True):
+            st.switch_page("pages/about_us.py")
+
+    with col_links[1]:
+        if st.button("👤 Profile", use_container_width=True):
+            if role == "Student":
+                st.switch_page("pages/student_profile.py")
+            elif role == "Tutor":
+                st.switch_page("pages/tutor_profile.py")
+
+    with col_links[2]:
+        if st.button("🎓 Tutors", use_container_width=True):
+            st.switch_page("pages/find_tutor.py")
+
+    with col_links[3]:
+        if st.button("🚪 Sign Out", use_container_width=True):
+            logout()
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 # ---- Hero Section ----
 st.markdown("""
