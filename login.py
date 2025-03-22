@@ -29,7 +29,7 @@ def login():
 
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
-    role = st.selectbox("Select your role", ["Student", "Tutor"], key = "role")
+    role = st.selectbox("Select your role", ["Student", "Tutor"], key = "role_info")
 
     if st.button("Login"):
         if not username or not password or not role:
