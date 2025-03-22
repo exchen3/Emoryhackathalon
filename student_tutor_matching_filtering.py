@@ -15,8 +15,6 @@ DB_HOST = os.getenv("DB_HOST", "localhost")
 
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
 
-# SessionLocal = sessionmaker(bind=engine)
-
 # Fetch available majors
 def get_majors():
     with engine.connect() as conn:
