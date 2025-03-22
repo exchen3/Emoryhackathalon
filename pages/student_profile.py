@@ -23,12 +23,56 @@ print("DB_HOST =", os.getenv("DB_HOST"))
 # Construct the SQLAlchemy engine
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
 
+load_dotenv()
+
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST","localhost")
+
+schema_name = "emoryhackathon"
+
+# Construct the SQLAlchemy engine
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
+username = st.session_state["username"]
+
 # Page configuration
 st.set_page_config(page_title="Student Profile", layout="centered")
+<<<<<<< Updated upstream
 username = st.session_state["username"]
 retrieve_query = text(f"SELECT * FROM student WHERE user_id = '{username}'")
 with engine.connect() as conn:
     result = conn.execute(retrieve_query).fetchone()
+=======
+
+# Ensure user is logged in
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    st.stop()
+
+try:
+    with engine.connect() as conn:
+        query = text(f"SELECT * FROM student WHERE user_id = :username")
+        result = conn.execute(query, {"username": username}).fetchone()
+
+        if result and result[0] == hashed_password:
+            st.success(f"Welcome, {username}!")
+
+            # Store user login state
+            st.session_state["logged_in"] = True
+            st.session_state["username"] = username
+            st.session_state["role"] = role
+
+            # Redirect to according info page
+            if role == "Student":
+                st.switch_page("pages/student_info_input.py")
+            elif role == "Tutor":
+                st.switch_page("pages/tutor_info_input.py")
+        else:
+            st.error("Invalid username or password.")
+except Exception as e:
+    st.error(f"Database error: {e}")  
+
+>>>>>>> Stashed changes
 # TODO: Replace the student with real data retrieval from database
 student = {
     "name": result[2],

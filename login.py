@@ -16,10 +16,13 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST","localhost")
 
 schema_name = "emoryhackathon"
-print("DEBUG ENV:")
-print("DB_USERNAME =", os.getenv("DB_USERNAME"))
-print("DB_PASSWORD =", os.getenv("DB_PASSWORD"))
-print("DB_HOST =", os.getenv("DB_HOST"))
+
+### Debug
+# print("DEBUG ENV:")
+# print("DB_USERNAME =", os.getenv("DB_USERNAME"))
+# print("DB_PASSWORD =", os.getenv("DB_PASSWORD"))
+# print("DB_HOST =", os.getenv("DB_HOST"))
+
 # Construct the SQLAlchemy engine
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
 
@@ -57,16 +60,15 @@ def login():
                         # Redirect to according info page
                         if role == "Student":
                             check_query = text(
-                                f"SELECT email IS NULL FROM student WHERE user_id = '{st.session_state['username']}'")
+                                f"SELECT email IS NULL FROM student WHERE user_id = '{st.session_state['username']}'"
+                            )
 
                             is_empty = conn.execute(check_query).fetchone()
 
                             if is_empty and is_empty[0]:
-                                st.page_link("pages/student_info_input.py",
-                                             label="Go to Student Personal Information page")
+                                st.switch_page("pages/student_info_input.py")
                             else:
-                                st.page_link("pages/student_home_page.py",
-                                             label="Go to Student Home Page")
+                                st.switch_page("pages/student_home_page.py")
                         elif role == "Tutor":
                             st.switch_page("pages/tutor_info_input.py")
                     else:

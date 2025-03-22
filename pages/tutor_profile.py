@@ -13,6 +13,7 @@ import base64
 # Set page config
 st.set_page_config(page_title="Tutor Profile", layout="centered")
 
+<<<<<<< Updated upstream
 
 username = st.session_state["username"]
 
@@ -26,6 +27,14 @@ with engine.connect() as conn:
     retrieve_query = text(f"SELECT * FROM tutor WHERE user_id = '{username}'")
     result = conn.execute(retrieve_query).fetchone()
 # TODO: Replace the student with real data retrieval from database
+=======
+# Ensure user is logged in
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    st.stop()
+
+# Sample tutor data (replace with your DB query)
+>>>>>>> Stashed changes
 tutor = {
     "name": result[2],
     "university": result[3],

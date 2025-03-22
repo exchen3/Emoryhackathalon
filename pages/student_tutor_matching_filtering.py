@@ -12,6 +12,13 @@ import base64
 
 load_dotenv()
 
+# Ensure user is logged in
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    if st.button("Login Page", use_container_width=True):
+        st.switch_page("login.py")
+    st.stop()
+
 username = st.session_state["username"]
 
 # Create a session factory
