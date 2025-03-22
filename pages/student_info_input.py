@@ -21,7 +21,7 @@ schema_name = "emoryhackathon"
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 
 # Set page configuration
-st.set_page_config(page_title="Info Input", layout="wide")
+st.set_page_config(page_title="Student Info Input", layout="wide")
 
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
