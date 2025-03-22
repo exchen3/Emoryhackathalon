@@ -11,11 +11,14 @@ import subprocess
 import base64
 
 load_dotenv()
+DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 
 schema_name = "emoryhackathon"
-engine = create_engine(f"mysql+pymysql://root:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
+
+# Construct the SQLAlchemy engine
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 
 # Set page configuration
 st.set_page_config(page_title="Info Input", layout="wide")
