@@ -30,7 +30,7 @@ username = st.session_state.get("username")
 
 st.title("🎓 Alumni Connect - Student Registration")
 
-def personal_information():
+def personal_information(user_id = username):
     # User input fields
     university = st.text_input("Enter your University")
     grad_year = st.number_input("Graduation Year", min_value=1990, max_value=2035, step=1)
@@ -63,45 +63,42 @@ def personal_information():
                                 
                 UPDATE student
                 SET university = :university, 
-                        graduation_year = :grad_year, 
-                        major = :major, 
-                        employed_status = :employed_status,
-                        internships = :internships, 
-                        grad_school = :grad_school, 
-                        gpa_range = :gpa_range, 
-                        classes_taking = :classes_taking, 
-                        bio = :bio
-                WHERE user_id = :username;
+                    graduation_year = :grad_year, 
+                    major = :major, 
+                    employed_status = :employed_status,
+                    internships = :internships, 
+                    grad_school = :grad_school, 
+                    gpa_range = :gpa_range, 
+                    classes_taking = :classes_taking, 
+                    bio = :bio
+                WHERE user_id = :username
+            ;
             """)
-            conn.execute(insert_query, {
-                "username": new_username,
-                "password": hashed_password,
-                "user_name": new_full_name,
-                "role": new_role
+
+            conn.execute(modify_query, {
+                "university": university,
+                "grad_year": grad_year,
+                "major": major,
+                "employed_status": employed_status,
+                "internships": internships,
+                "grad_school": grad_school,
+                "gpa_range": gpa_range, 
+                "classes_taking": classes_taking, 
+                "bio": bio,
+                "username": user_id
             })
 
             conn.commit()
 
-            st.success("Registration successful! You can now log in.")
+            st.success("Personal Information Updated!")
 
     except Exception as e:
         st.error(f"Database error: {e}")
-    
-    university: university,
-    graduation_year: grad_year,
-    major: major,
-    employed_status: employed_status,
-    internships: internships,
-    grad_school: grad_school,
-    gpa_range: gpa_range,
-    classes_taking: classes_taking,
-    bio: bio
-        
-    response = requests.post("http://127.0.0.1:5000/register", json=student_data)
-    
-    if response.status_code == 200:
-        st.success(f"Welcome, {name}! Your information has been recorded.")
-    else:
-        st.error("Error submitting your information. Please try again.")
-else:
-    st.warning("Please fill out all required fields before submitting.")
+
+# TODO: remove the 2nd tab
+tab1, tab2 = st.tabs(["Fill in Personal Information", "Edit Existing Personal Information"])
+
+with tab1:
+    personal_information()
+with tab2:
+    personal_information()

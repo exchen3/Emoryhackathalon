@@ -49,9 +49,13 @@ def login():
                         # Store user login state
                         st.session_state["logged_in"] = True
                         st.session_state["username"] = username
+                        st.session_state["role"] = role
 
-                        # Redirect to homepage.py
-                        # st.switch_page("pages/homepage.py")
+                        # Redirect to according info page
+                        if role == "Student":
+                            st.switch_page("pages/student_info_input.py")
+                        elif role == "Tutor":
+                            st.switch_page("pages/tutor_info_input.py")
                     else:
                         st.error("Invalid username or password.")
         except Exception as e:
@@ -107,7 +111,9 @@ def register():
 
 if "logged_in" in st.session_state and st.session_state["logged_in"]:
     st.success(f"Welcome back, {st.session_state['username']}!")
+    print()
     st.page_link("pages/homepage.py", label="Go to HomePage", icon="🍽️")
+
 else:
     tab1, tab2 = st.tabs(["Login", "Create a New Account"])
 
