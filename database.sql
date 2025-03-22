@@ -37,8 +37,7 @@ CREATE TABLE student (
 
 select * from emoryhackathon.student;
 
-CREATE USER 'lisa'@'%' IDENTIFIED BY 'lisa';
-GRANT ALL PRIVILEGES ON emoryhackathon.* TO 'lisa'@'%';
-FLUSH PRIVILEGES;
+CREATE USER 'lynne'@'%' IDENTIFIED BY 'lynne';
+GRANT ALL PRIVILEGES ON emoryhackathon.* TO 'lynne'@'%';
 
 -- create request tutor_user_id, student_user_id, 
