@@ -1,57 +1,158 @@
 import streamlit as st
-import requests
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sqlalchemy import create_engine, text
+import os
+from dotenv import load_dotenv
+import hashlib
+import subprocess
+import base64
 
-st.title("📚 Alumni Connect - Tutor Registration")
+load_dotenv()
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST", "localhost")
 
-# User input fields
-user_id = st.text_input("Enter your User ID (Email)")
-password = st.text_input("Enter your Password", type="password")
-name = st.text_input("Enter your Name")
-university = st.text_input("Enter your University")
-grad_year = st.number_input("Graduation Year", min_value=1990, max_value=2035, step=1)
+schema_name = "emoryhackathon"
 
-# Standardized list of majors
-majors = ["Computer Science", "Biology", "Business", "Engineering", "Psychology", "Other"]
-major = st.selectbox("Select your Major", majors)
+# Construct the SQLAlchemy engine
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 
-# Boolean selections
-employed_status = st.checkbox("Currently Employed?")
-internships = st.checkbox("Have you done any Internships?")
-grad_school = st.checkbox("Planning for Graduate School?")
+# Set page configuration
+st.set_page_config(page_title="Tutor Info Input", layout="wide")
 
-# GPA range selection
-gpa_options = ["Below 2.5", "2.5 - 3.0", "3.0 - 3.5", "3.5 - 4.0", "4.0+"]
-gpa_range = st.selectbox("Select your GPA Range", gpa_options)
+# Ensure user is logged in
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    st.stop()
 
-# Classes Teaching (comma-separated input)
-classes_taking = st.text_area("Enter the classes you can teach (comma-separated)")
+# Retrieve username from session
+username = st.session_state.get("username")
 
-# Personal Bio
-bio = st.text_area("Write a short bio about yourself")
+st.title("🎓 Tutor Connect - Tutor Registration")
 
-# Submit button
-if st.button("Submit"):
-    if user_id and password and name and university and grad_year and major and gpa_range and classes_taking and bio:
-        tutor_data = {
-            "user_id": user_id,
-            "password": password,
-            "name": name,
-            "university": university,
-            "graduation_year": grad_year,
-            "major": major,
-            "employed_status": employed_status,
-            "internships": internships,
-            "grad_school": grad_school,
-            "gpa_range": gpa_range,
-            "classes_taking": classes_taking,
-            "bio": bio
-        }
-        
-        response = requests.post("http://127.0.0.1:5000/register", json=tutor_data)
-        
-        if response.status_code == 200:
-            st.success(f"Welcome, {name}! Your information has been recorded.")
-        else:
-            st.error("Error submitting your information. Please try again.")
-    else:
-        st.warning("Please fill out all required fields before submitting.")
+def personal_information(user_id=username):
+    # Fetch current values from the DB
+    try:
+        with engine.connect() as conn:
+            query = text("SELECT * FROM tutor WHERE user_id = :username")
+            result = conn.execute(query, {"username": user_id}).fetchone()
+
+            if result:
+                current_info = result._mapping  # ✅ correct way to access row data as dict
+            else:
+                st.error("No tutor record found for this user.")
+                return
+    except Exception as e:
+        st.error(f"Database error fetching current data: {e}")
+        return
+
+    # Set default values from DB or show placeholder if empty
+    email = st.text_input(
+        "Enter your Email",
+        value=current_info.get("email") or "",
+        key="email"
+    )
+
+    university = st.text_input(
+        "Enter your University", 
+        value=current_info.get("university"), 
+        key="university"
+    )
+    grad_year = st.number_input(
+        "Graduation Year", 
+        min_value=1990, 
+        max_value=2035, 
+        step=1, 
+        value=current_info.get("graduation_year"), 
+        key="grad_year"
+    )
+    majors = ["Computer Science", "Biology", "Business", "Engineering", "Psychology", "Other"]
+    major = st.selectbox(
+        "Select your Major", 
+        majors, 
+        index=majors.index(current_info.get("major")) if current_info.get("major") in majors else 0,
+        key="major"
+    )
+    employed_status = st.checkbox(
+        "Currently Employed?", 
+        value=bool(current_info.get("employed_status")), 
+        key="employed_status"
+    )
+    internships = st.checkbox(
+        "Have you done any Internships?", 
+        value=bool(current_info.get("internships")), 
+        key="internships"
+    )
+    grad_school = st.checkbox(
+        "Are you currently in Graduate School?", 
+        value=bool(current_info.get("grad_school")), 
+        key="grad_school"
+    )
+    gpa_options = ["Below 2.5", "2.5 - 3.0", "3.0 - 3.5", "3.5 - 4.0"]
+    gpa_range = st.selectbox(
+        "Select your GPA Range (on a scale of 4)", 
+        gpa_options, 
+        index=gpa_options.index(current_info.get("gpa_range")) if current_info.get("gpa_range") in gpa_options else 0,
+        key="gpa_range"
+    )
+    classes_teaching = st.text_area(
+        "Enter the classes want to teach (comma-separated)", 
+        value=current_info.get("classes_teaching"), 
+        key="classes_teaching"
+    )
+    bio = st.text_area(
+        "Write a short bio about yourself", 
+        value=current_info.get("bio"), 
+        key="bio"
+    )
+
+    # Submit updated info
+    if st.button("Submit Information"):
+        # Check required fields
+        if not university or university == "empty" or not classes_taking or classes_taking == "empty" or not bio or bio == "empty":
+            st.warning("Please fill in all required fields.")
+            return
+
+        try:
+            with engine.connect() as conn:
+                modify_query = text("""                                
+                    UPDATE tutor
+                    SET university = :university, 
+                        graduation_year = :grad_year, 
+                        major = :major, 
+                        employed_status = :employed_status,
+                        internships = :internships, 
+                        grad_school = :grad_school, 
+                        gpa_range = :gpa_range, 
+                        classes_teaching = :classes_teaching, 
+                        bio = :bio,
+                        email = :email
+                    WHERE user_id = :username
+                ;""")
+
+                conn.execute(modify_query, {
+                    "university": university,
+                    "grad_year": grad_year,
+                    "major": major,
+                    "employed_status": employed_status,
+                    "internships": internships,
+                    "grad_school": grad_school,
+                    "gpa_range": gpa_range,
+                    "classes_teaching": classes_teaching,
+                    "bio": bio,
+                    "username": user_id,
+                    "email": email
+                })
+
+                conn.commit()
+                st.success("Personal Information Updated!")
+
+        except Exception as e:
+            st.error(f"Database error: {e}")
+
+
+st.header("Fill in or Edit Your Personal Information")
+personal_information()

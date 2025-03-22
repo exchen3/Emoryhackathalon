@@ -40,6 +40,4 @@ select * from emoryhackathon.student;
 CREATE USER 'lynne'@'%' IDENTIFIED BY 'lynne';
 GRANT ALL PRIVILEGES ON emoryhackathon.* TO 'lynne'@'%';
 
-SELECT host FROM mysql.user;
-
 -- create request tutor_user_id, student_user_id, 
