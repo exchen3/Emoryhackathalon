@@ -21,7 +21,34 @@ schema_name = "emoryhackathon"
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 # This engine connects to a MySQL database using the root user, the password retrieved from DB_PASSWORD,
 # and the host from DB_HOST. It specifies the emoryhackathon schema.
-
+'''
+st.markdown(
+    """
+    <style>
+    .main-title {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 36px;
+        font-weight: bold;
+        color: #FF5733;
+        text-align: center;
+    }
+    .login-text {
+        font-size: 20px
+        font-weight: bold;
+        color: #4B8AFF;
+    }
+    .register-text {
+        font-size: 20px;
+        font-weight: bold;
+        color: #32CD32
+    }
+    </style> 
+    """,
+    unsafe_allow_html = True
+)
+'''
 ## TODO: Make login function
 def hash_password(password):
     # encryption
@@ -113,7 +140,7 @@ def register():
 
 if "logged_in" in st.session_state and st.session_state["logged_in"]:
     st.success(f"Welcome back, {st.session_state['username']}!")
-    st.page_link("pages/homepage.py", label="Go to HomePage", icon="🍽️")
+    st.page_link("pages/homepage.py", label="Go to HomePage", icon="🍽️") #repetitive??
 else:
     # st.tabs() is a Streamlit function that creates multiple tabs
     tab1, tab2 = st.tabs(["Login", "Create a New Account"])
