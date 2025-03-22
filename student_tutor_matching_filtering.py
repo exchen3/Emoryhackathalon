@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+username = st.session_state["username"]
+
 # Create a session factory
 schema_name = "emoryhackathon"
 
