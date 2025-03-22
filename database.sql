@@ -2,6 +2,7 @@ use emoryhackathon;
 
 drop table if exists tutor;
 drop table if exists student;
+drop table if exists requests;
 
 CREATE TABLE tutor (
     user_id VARCHAR(100) PRIMARY KEY,
@@ -40,4 +41,15 @@ select * from emoryhackathon.student;
 CREATE USER 'lynne'@'%' IDENTIFIED BY 'lynne';
 GRANT ALL PRIVILEGES ON emoryhackathon.* TO 'lynne'@'%';
 
--- create request tutor_user_id, student_user_id, 
+-- create request tutor_user_id, student_user_id,
+CREATE TABLE requests (
+    request_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_user_id VARCHAR(100) NOT NULL,
+    tutor_user_id VARCHAR(100) NOT NULL,
+    `status` ENUM('Pending', 'Accepted', 'Rejected') NOT NULL,
+    message VARCHAR(1000) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_user_id) REFERENCES student(user_id),
+    FOREIGN KEY (tutor_user_id) REFERENCES tutor(user_id)
+);
