@@ -9,20 +9,36 @@ from dotenv import load_dotenv
 import hashlib
 import subprocess
 import base64
+load_dotenv()
+
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST","localhost")
+
+schema_name = "emoryhackathon"
+print("DEBUG ENV:")
+print("DB_USERNAME =", os.getenv("DB_USERNAME"))
+print("DB_PASSWORD =", os.getenv("DB_PASSWORD"))
+print("DB_HOST =", os.getenv("DB_HOST"))
+# Construct the SQLAlchemy engine
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
 
 # Page configuration
 st.set_page_config(page_title="Student Profile", layout="centered")
-
+username = st.session_state["username"]
+retrieve_query = text(f"SELECT * FROM student WHERE user_id = '{username}'")
+with engine.connect() as conn:
+    result = conn.execute(retrieve_query).fetchone()
 # TODO: Replace the student with real data retrieval from database
 student = {
-    "name": "Andy Dang",
-    "university": "Emory University",
-    "graduation_year": 2025,
-    "major": "Business Analytics",
-    "gpa_range": "3.5 - 4.0",
-    "classes_taking": "Machine Learning, Prescriptive Analytics, NLP",
-    "bio": "Passionate about data, education, and making an impact.",
-    "email": "andykhangdang@gmail.com"
+    "name": result[2],
+    "university": result[3],
+    "graduation_year": result[4],
+    "major": result[5],
+    "gpa_range": result[9],
+    "classes_taking": result[10],
+    "bio": result[11],
+    "email": result[12]
 }
 
 # Inject CSS for background and styling

@@ -13,17 +13,30 @@ import base64
 # Set page config
 st.set_page_config(page_title="Tutor Profile", layout="centered")
 
-# Sample tutor data (replace with your DB query)
+
+username = st.session_state["username"]
+
+load_dotenv()
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST","localhost")
+schema_name = "emoryhackathon"
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
+with engine.connect() as conn:
+    retrieve_query = text(f"SELECT * FROM tutor WHERE user_id = '{username}'")
+    result = conn.execute(retrieve_query).fetchone()
+# TODO: Replace the student with real data retrieval from database
 tutor = {
-    "name": "Jane Smith",
-    "university": "Georgia Tech",
-    "graduation_year": 2024,
-    "major": "Computer Science",
-    "employed_status": "Yes",
-    "classes_teaching": "Data Structures, Algorithms, Machine Learning",
-    "grad_school": "No",
-    "email": "janesmith@example.com",
-    "bio": "I love helping students understand complex CS topics in simple ways!"
+    "name": result[2],
+    "university": result[3],
+    "graduation_year": result[4],
+    "employed_status": result[6],
+    "grad_school": result[8],
+    "major": result[5],
+    "gpa_range": result[9],
+    "classes_teaching": result[10],
+    "bio": result[11],
+    "email": result[12]
 }
 
 # Custom CSS for background, navbar, and card layout
