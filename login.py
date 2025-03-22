@@ -25,17 +25,18 @@ def login():
 
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
+    role = st.selectbox("Select your role", ["Student", "Tutor"], key = "role")
 
     if st.button("Login"):
-        if not username or not password:
+        if not username or not password or not role:
             st.error("Please enter both username and password.")
             return
-        
+
         hashed_password = hash_password(password)
 
         try:
                 with engine.connect() as conn:
-                    query = text("SELECT password FROM customers WHERE user_id = :username")
+                    query = text(f"SELECT password FROM {role} WHERE user_id = :username")
                     result = conn.execute(query, {"username": username}).fetchone()
 
                     if result and result[0] == hashed_password:
@@ -46,7 +47,7 @@ def login():
                         st.session_state["username"] = username
 
                         # Redirect to homepage.py
-                        st.switch_page("pages/homepage.py")
+                        # st.switch_page("pages/homepage.py")
                     else:
                         st.error("Invalid username or password.")
         except Exception as e:
@@ -59,7 +60,7 @@ def register():
     new_full_name = st.text_input("Name", key="reg_full_name")
     new_password = st.text_input("Choose a Password", type="password", key="reg_password")
     confirm_password = st.text_input("Confirm Password", type="password", key="confirm_password")
-    new_role = st.selectbox("Select your role", ["Student", "Tutor"])
+    new_role = st.selectbox("Select your role", ["Student", "Tutor"], key = "new_role")
 
     if st.button("Register"):
         if not new_username or not new_password or not confirm_password or not new_role:
@@ -75,7 +76,7 @@ def register():
         try:
             with engine.connect() as conn:
                 # Check if username already exists
-                check_query = text("SELECT user_id FROM customers WHERE user_id = :username")
+                check_query = text(f"SELECT user_id FROM {new_role} WHERE user_id = :username")
                 existing_user = conn.execute(check_query, {"username": new_username}).fetchone()
 
                 if existing_user:
@@ -83,15 +84,14 @@ def register():
                     return
 
                 # Insert new user
-                insert_query = text("""
-                    INSERT INTO customers (user_id, password, user_name, favorites, last_visit)
-                    VALUES (:username, :password, :user_name, NULL, CURDATE())
+                insert_query = text(f"""
+                    INSERT INTO {new_role} (user_id, password, name )
+                    VALUES (:username, :password, :user_name)
                 """)
                 conn.execute(insert_query, {
                     "username": new_username,
                     "password": hashed_password,
-                    "user_name": new_full_name,
-                    "role": new_role
+                    "user_name": new_full_name
                 })
 
                 conn.commit()
