@@ -21,6 +21,8 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
         st.switch_page("login.py")
     st.stop()
 
+role = st.session_state.get('role', '') or ''
+
 # Custom CSS (basic styles mimicking your HTML)
 st.markdown("""
     <style>
@@ -105,7 +107,10 @@ with st.container():
 
     with col_links[1]:
         if st.button("👤 Profile", use_container_width=True):
-            st.switch_page("pages/student_profile.py")
+            if role == "Student":
+                st.switch_page("pages/student_profile.py")
+            elif role == "Tutor":
+                st.switch_page("pages/tutor_profile.py")
 
     with col_links[2]:
         if st.button("🎓 Tutors", use_container_width=True):
