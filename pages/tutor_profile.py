@@ -10,6 +10,12 @@ import hashlib
 import subprocess
 import base64
 
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    if st.button("Login Page", use_container_width=True):
+        st.switch_page("login.py")
+    st.stop()
+
 # Set page config
 st.set_page_config(page_title="Tutor Profile", layout="centered")
 
