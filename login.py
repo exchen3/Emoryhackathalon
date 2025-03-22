@@ -13,12 +13,15 @@ load_dotenv()
 
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_HOST = os.getenv("DB_HOST","localhost")
 
 schema_name = "emoryhackathon"
-
+print("DEBUG ENV:")
+print("DB_USERNAME =", os.getenv("DB_USERNAME"))
+print("DB_PASSWORD =", os.getenv("DB_PASSWORD"))
+print("DB_HOST =", os.getenv("DB_HOST"))
 # Construct the SQLAlchemy engine
-engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
+engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
 
 ## TODO: Make login function
 def hash_password(password):
@@ -111,8 +114,10 @@ def register():
 
 if "logged_in" in st.session_state and st.session_state["logged_in"]:
     st.success(f"Welcome back, {st.session_state['username']}!")
-    # TODO: edit this homepage link to get to actual homepage
-    st.page_link("pages/homepage.py", label="Go to HomePage")
+    if st.session_state['role'] == "Student":
+        st.page_link("pages/student_info_input.py", label="Go to Student Personal Information page")
+    elif st.session_state['role'] == "Tutor":
+        st.page_link("pages/tutor_info_input.py", label="Go to Tutor Personal Information page")
 
 else:
     tab1, tab2 = st.tabs(["Login", "Create a New Account"])
