@@ -38,9 +38,6 @@ CREATE TABLE student (
 
 select * from emoryhackathon.student;
 
-CREATE USER 'lynne'@'%' IDENTIFIED BY 'lynne';
-GRANT ALL PRIVILEGES ON emoryhackathon.* TO 'lynne'@'%';
-
 -- create request tutor_user_id, student_user_id,
 CREATE TABLE requests (
     request_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,7 +51,7 @@ CREATE TABLE requests (
     FOREIGN KEY (tutor_user_id) REFERENCES tutor(user_id)
 );
 
-select * from student;
+select * from requests;
 
 ALTER TABLE tutor
 DROP COLUMN price_per_hour;
@@ -75,5 +72,3 @@ ADD COLUMN price_per_hour ENUM(
 
 ALTER TABLE requests
 ADD COLUMN completed BOOLEAN DEFAULT FALSE;
-
-select * from tutor;
