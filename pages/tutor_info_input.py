@@ -17,7 +17,7 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.stop()
 
 if st.session_state["role"] != "Tutor":
-    st.warning("This page is for tutors only.")
+    st.warning("This page is only accessible by tutors.")
     st.stop()
 
 load_dotenv()
