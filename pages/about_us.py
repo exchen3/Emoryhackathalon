@@ -186,10 +186,10 @@ st.markdown("### ", unsafe_allow_html=True)
 # Team Members
 cols = st.columns(4)
 team = [
-    {"name": "Eric Chen", "role": "Developer", "img": "https://randomuser.me/api/portraits/women/68.jpg"},
-    {"name": "Andy Dang", "role": "Developer", "img": "https://randomuser.me/api/portraits/men/43.jpg"},
-    {"name": "Lisa Yang", "role": "Developer", "img": "https://randomuser.me/api/portraits/women/65.jpg"},
-    {"name": "Lynne Zheng", "role": "Developer", "img": "https://randomuser.me/api/portraits/women/65.jpg"},
+    {"name": "Eric Chen", "role": "Developer", "img": "photos/eric_photo.jpg"},
+    {"name": "Andy Dang", "role": "Developer", "img": "photos/andy_photo.jpg"},
+    {"name": "Lisa Yang", "role": "Developer", "img": "photos/lisa_photo.jpg"},
+    {"name": "Lynne Zheng", "role": "Developer", "img": "photos/lynne_photo.jpg"},
 ]
 
 for col, member in zip(cols, team):
