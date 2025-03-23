@@ -1,6 +1,6 @@
 # 📚 TutorConnect
 
-**TutorConnect** is a web-based platform that connects underclassmen college students with qualified upperclassmen tutors. The goal is to offer flexible, peer-based academic support while also providing upperclassmen with gig-based income opportunities.
+**TutorConnect** is a web-based platform that connects underclassmen college students with qualified upperclassmen or alumni tutors. The goal is to offer flexible, peer-based academic support while also providing upperclassmen with gig-based income opportunities.
 
 ---
 
