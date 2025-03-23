@@ -174,8 +174,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Profile content
-# st.markdown('<div class="profile-container">', unsafe_allow_html=True)
-st.markdown('<h1 class="profile-header">Student Profile</h1>', unsafe_allow_html=True)
+st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
+st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
 
 def render_field(label, value):
     st.markdown(f'<div class="profile-field"><strong>{label}:</strong> {value}</div>', unsafe_allow_html=True)

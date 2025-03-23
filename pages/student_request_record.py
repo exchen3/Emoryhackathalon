@@ -128,7 +128,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Streamlit UI
-st.title("📌 Your Tutoring Requests")
 
 def logout():
     # Clear session state
@@ -137,13 +136,13 @@ def logout():
             del st.session_state[key]
 
     st.success("You have been logged out.")
-    time.sleep(1)
     st.switch_page("login.py")  # Navigate to login page
 
 
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
 st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+
 
 # Use Streamlit's built-in page links for navigation
 with st.container():
@@ -181,7 +180,7 @@ with st.container():
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 
-
+st.title("📌 Your Tutoring Requests")
 requests = get_student_requests(username)
 
 # Categorize requests
