@@ -4,6 +4,8 @@ import os
 from dotenv import load_dotenv
 import time
 
+st.set_page_config(page_title="Tutor Request List", layout="wide")
+
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("Please log in first!")
     if st.button("Login Page", use_container_width=True):
