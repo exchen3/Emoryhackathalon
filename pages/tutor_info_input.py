@@ -10,6 +10,9 @@ import hashlib
 import subprocess
 import base64
 
+# Set page configuration
+# st.set_page_config(page_title="Tutor Info Input", layout="wide")
+
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("Please log in first!")
     if st.button("Login Page", use_container_width=True):
@@ -29,9 +32,6 @@ schema_name = "emoryhackathon"
 
 # Construct the SQLAlchemy engine
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
-
-# Set page configuration
-st.set_page_config(page_title="Tutor Info Input", layout="wide")
 
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:

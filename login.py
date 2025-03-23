@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 import hashlib
 import time
 
+# Set page configuration
+st.set_page_config(page_title="Login", layout="wide")
+
 load_dotenv()
 
 DB_USERNAME = os.getenv("DB_USERNAME")
