@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import hashlib
 import subprocess
 import base64
+import time
 
 load_dotenv()
 # Page configuration
@@ -25,6 +26,49 @@ if st.session_state["role"] != "Student":
     st.warning("This site can be only accessed by students.")
     st.stop()
 
+def logout():
+    # Clear session state
+    for key in ["logged_in", "username", "role"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    
+    st.success("You have been logged out.")
+    time.sleep(1)
+    st.switch_page("login.py")  # Navigate to login page
+
+# ---- Navbar ----
+st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
+st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+
+# Use Streamlit's built-in page links for navigation
+with st.container():
+    col_links = st.columns(4)
+
+    with col_links[0]:
+        if st.button("🧭 About Us", use_container_width=True):
+            st.switch_page("pages/about_us.py")
+
+    with col_links[1]:
+        if st.button("👤 Profile", use_container_width=True):
+            if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+                st.warning("Please log in first!")
+                time.sleep(1)
+                st.switch_page("login.py")
+            else:
+                role = st.session_state.get("role")
+                if role == "Student":
+                    st.switch_page("pages/student_profile.py")
+                elif role == "Tutor":
+                    st.switch_page("pages/tutor_profile.py")
+
+    with col_links[2]:
+        if st.button("🎓 Tutors", use_container_width=True):
+            st.switch_page("pages/find_tutor.py")
+
+    with col_links[3]:
+        if st.button("🚪 Sign Out", use_container_width=True):
+            logout()
+
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST","localhost")
@@ -39,17 +83,10 @@ retrieve_query = text(f"SELECT * FROM student WHERE user_id = '{username}'")
 with engine.connect() as conn:
     result = conn.execute(retrieve_query).fetchone()
 
-
-# Ensure user is logged in
-if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
-    st.warning("Please log in first!")
-    st.stop()
-
 try:
     with engine.connect() as conn:
         query = text(f"SELECT * FROM student WHERE user_id = :username")
         result = conn.execute(query, {"username": username}).fetchone()
-
 
 except Exception as e:
     st.error(f"Database error: {e}")  
@@ -72,7 +109,6 @@ st.markdown("""
 
     html, body, .stApp {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
         background-size: cover;
     }
 
@@ -129,22 +165,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Navbar
-st.markdown("""
-<div class="navbar">
-    <div class="navbar_logo"><strong>TutorConnect</strong></div>
-    <div class="navbar_menu">
-        <a href="#">About Us</a>
-        <a href="#">Profile</a>
-        <a href="#">Tutors</a>
-        <a href="#">Subjects</a>
-        <a href="#">Sign Out</a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
 # Profile content
-st.markdown('<div class="profile-container">', unsafe_allow_html=True)
+# st.markdown('<div class="profile-container">', unsafe_allow_html=True)
 st.markdown('<h1 class="profile-header">Student Profile</h1>', unsafe_allow_html=True)
 
 def render_field(label, value):

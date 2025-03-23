@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import hashlib
 import subprocess
 import base64
+import time
 
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("Please log in first!")
@@ -16,7 +17,12 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
         st.switch_page("login.py")
     st.stop()
 
+if st.session_state["role"] != "Student":
+    st.warning("This site can be only accessed by students.")
+    st.stop()
+
 load_dotenv()
+
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST", "localhost")
@@ -62,11 +68,77 @@ def personal_information(user_id=username):
         key="email"
     )
 
-    university = st.text_input(
-        "Enter your University", 
-        value=current_info.get("university"), 
+    universities = [
+        "Amherst College",
+        "Arizona State University",
+        "Babson College",
+        "Bard College",
+        "Barnard College",
+        "Baylor University",
+        "Boston College",
+        "Boston University",
+        "Bowdoin College",
+        "Brandeis University",
+        "Brown University",
+        "California Institute of Technology (Caltech)",
+        "Carnegie Mellon University",
+        "Colby College",
+        "Columbia University",
+        "Cornell University",
+        "Dartmouth College",
+        "Duke University",
+        "Emory University",
+        "Florida State University",
+        "Georgetown University",
+        "Georgia Institute of Technology",
+        "Harvard University",
+        "Indiana University Bloomington",
+        "Johns Hopkins University",
+        "Louisiana State University",
+        "Massachusetts Institute of Technology (MIT)",
+        "Northwestern University",
+        "Ohio State University",
+        "Oregon State University",
+        "Princeton University",
+        "Purdue University",
+        "Rice University",
+        "Stanford University",
+        "Syracuse University",
+        "Temple University",
+        "Texas A&M University",
+        "The George Washington University",
+        "The New School",
+        "Tufts University",
+        "University of California, Berkeley",
+        "University of California, Los Angeles (UCLA)",
+        "University of Chicago",
+        "University of Florida",
+        "University of Illinois Urbana-Champaign",
+        "University of Maryland, College Park",
+        "University of Michigan",
+        "University of North Carolina at Chapel Hill",
+        "University of Notre Dame",
+        "University of Pennsylvania",
+        "University of Pittsburgh",
+        "University of Southern California (USC)",
+        "University of Texas at Austin",
+        "University of Washington",
+        "Vanderbilt University",
+        "Wake Forest University",
+        "Washington University in St. Louis",
+        "Wellesley College",
+        "Yale University"
+        "Other",
+    ]
+
+    university = st.selectbox(
+        "Select Your University",
+        universities,
+        index=universities.index(current_info.get("university")) if current_info.get(
+            "university") in universities else 0,
         key="university"
     )
+
     grad_year = st.number_input(
         "Graduation Year", 
         min_value=1990, 
@@ -75,7 +147,20 @@ def personal_information(user_id=username):
         value=current_info.get("graduation_year"), 
         key="grad_year"
     )
-    majors = ["Computer Science", "Biology", "Business", "Engineering", "Psychology", "Other"]
+    majors = [
+        "Biology", "Chemistry", "Physics", "Mathematics", "Statistics",
+        "Computer Science", "Data Science", "Engineering", "Psychology",
+        "Economics", "Business", "Finance", "Accounting", "Marketing",
+        "History", "Political Science", "Philosophy", "Sociology", "Anthropology",
+        "English", "Linguistics", "Education", "Communication", "Journalism",
+        "Law", "Criminal Justice", "Public Policy",
+        "Medicine", "Nursing", "Public Health", "Pharmacy", "Neuroscience",
+        "Environmental Science", "Geology", "Astronomy", "Agricultural Science",
+        "Art", "Music", "Theater", "Film Studies", "Graphic Design",
+        "Sports Management", "Kinesiology",
+        "Other"
+    ]
+
     major = st.selectbox(
         "Select your Major", 
         majors, 
@@ -134,7 +219,7 @@ def personal_information(user_id=username):
 
                 conn.commit()
                 st.success("Personal Information Updated!")
-                st.page_link("pages/student_home_page.py", label="Go to Student Personal Information page")
+                st.page_link("pages/student_home_page.py", label="Go to Student Home Page")
 
                 # Display the HTML as full-page content
 
