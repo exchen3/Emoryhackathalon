@@ -66,11 +66,6 @@ with st.container():
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 
-st.markdown("""
-<div class="centered-container">
-    <h1 class="display-4 fw-bold">About <span class="highlight">TutorConnect</span></h1>
-</div>
-""", unsafe_allow_html=True)
 
 load_dotenv()
 
