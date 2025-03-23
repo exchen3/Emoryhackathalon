@@ -53,7 +53,7 @@ st.markdown("""
         font-weight: bold;
     }
     .hero {
-        background: linear-gradient(to right, #4B7BE5, #6FB1FC);
+        background: linear-gradient(to right, #800020, #E0115F);
         color: white;
         padding: 4rem 2rem;
         text-align: center;

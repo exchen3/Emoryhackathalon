@@ -12,7 +12,7 @@ import base64
 import time
 
 # Page config
-st.set_page_config(page_title="TutorConnect | Learn Better", layout="wide")
+st.set_page_config(page_title="Student Home Page", layout="wide")
 
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
@@ -53,7 +53,7 @@ st.markdown("""
         font-weight: bold;
     }
     .hero {
-        background: linear-gradient(to right, #4B7BE5, #6FB1FC);
+        background: linear-gradient(to right, #800020, #E0115F);
         color: white;
         padding: 4rem 2rem;
         text-align: center;
@@ -81,7 +81,7 @@ st.markdown("""
         text-align: center;
         margin-bottom: 2rem;
         font-size: 2rem;
-        color: #4B7BE5;
+        color: #ffffff;
     }
     .card img {
         border-radius: 10px;
