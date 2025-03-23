@@ -20,50 +20,49 @@ engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3
 # Get the tutor's ID in this session
 username = st.session_state["username"]
 
-# Function to fetch tutoring requests for a specific tutor
-def get_tutoring_requests(tutor_id):
+# Function to fetch accepted tutoring requests
+
+def get_accepted_requests(tutor_id):
     with engine.connect() as conn:
         query = text("""
         SELECT 
-            tr.request_id, tr.student_user_id, tr.`status`, tr.message,
+            tr.request_id, tr.student_user_id, tr.completed, tr.message,
             s.name, s.university, s.graduation_year, s.major, s.employed_status, s.internships, s.grad_school, s.gpa_range, s.classes_taking, s.bio, s.email 
         FROM requests tr
         JOIN student s ON tr.student_user_id = s.user_id
-        WHERE tr.tutor_user_id = :tutor_id;
+        WHERE tr.tutor_user_id = :tutor_id AND tr.status = 'Accepted';
         """)
         result = conn.execute(query, {"tutor_id": tutor_id}).fetchall()
     
     return result
 
-# Function to update the request status
-def update_request_status(request_id, new_status):
+# Function to update completion status
+def update_completion_status(request_id, new_status):
     with engine.connect() as conn:
         query = text("""
             UPDATE requests
-            SET status = :new_status
+            SET completed = :new_status
             WHERE request_id = :request_id;
         """)
         conn.execute(query, {"new_status": new_status, "request_id": request_id})
         conn.commit()
 
 # Streamlit UI
-st.title("📌 Tutoring Requests")
+st.title("✅ Completion Status of Tutoring Requests")
 
-requests = get_tutoring_requests(username)
+requests = get_accepted_requests(username)
 
 # Categorize requests
-pending_requests = [req for req in requests if req.status == "Pending"]
-accepted_requests = [req for req in requests if req.status == "Accepted"]
-rejected_requests = [req for req in requests if req.status == "Rejected"]
+uncompleted_requests = [req for req in requests if req.completed == 0]
+completed_requests = [req for req in requests if req.completed == 1]
 
 request_categories = {
-    f"🟡 Pending Requests ({len(pending_requests)})": pending_requests,
-    f"🟢 Accepted Requests ({len(accepted_requests)})": accepted_requests,
-    f"🔴 Rejected Requests ({len(rejected_requests)})": rejected_requests,
+    f"🟠 Uncompleted Requests ({len(uncompleted_requests)})": uncompleted_requests,
+    f"🟢 Completed Requests ({len(completed_requests)})": completed_requests,
 }
 
 if not requests:
-    st.info("No tutoring requests received yet.")
+    st.info("No accepted tutoring requests yet.")
 else:
     for category, req_list in request_categories.items():
         with st.expander(category, expanded=False):
@@ -71,7 +70,6 @@ else:
                 st.write("No requests in this category.")
             else:
                 for req in req_list:
-                    # Display each request as a formatted block instead of an expander
                     st.markdown("---")
                     st.markdown(f"### 🔹 {req.name} — 📚 {req.major}, 🎓 {req.graduation_year}")
                     st.markdown(f"""
@@ -87,16 +85,17 @@ else:
 
                     st.markdown(f"✉️ **Message:** {req.message}")
                     
-                    # Status selection dropdown
-                    status_options = ["Pending", "Accepted", "Rejected"]
-                    selected_status = st.selectbox(
-                        "📌 Status:",
-                        status_options,
-                        index=status_options.index(req.status),
-                        key=f"status_{req.request_id}"
+                    # Completion status selection dropdown
+                    completion_options = ["Uncompleted", "Completed"]
+                    selected_completion = st.selectbox(
+                        "✅ Completion Status:",
+                        completion_options,
+                        index=completion_options.index("Completed") if req.completed else 0,
+                        key=f"completion_{req.request_id}"
                     )
-
+                    
                     # Update status if changed
-                    if selected_status != req.status:
-                        update_request_status(req.request_id, selected_status)
-                        st.success(f"Status updated to {selected_status}.")
+                    new_status_value = 1 if selected_completion == "Completed" else 0
+                    if new_status_value != req.completed:
+                        update_completion_status(req.request_id, new_status_value)
+                        st.success(f"Completion status updated to {selected_completion}.")
