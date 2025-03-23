@@ -119,13 +119,21 @@ st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=Tr
 
 # Use Streamlit's built-in page links for navigation
 with st.container():
-    col_links = st.columns(4)
+    col_links = st.columns(5)
 
     with col_links[0]:
+        if st.button("🏠 Home", use_container_width=True):
+            role = st.session_state.get("role")
+            if role == "Student":
+                st.switch_page("pages/student_home_page.py")
+            elif role == "Tutor":
+                st.switch_page("pages/tutor_home_page.py")
+
+    with col_links[1]:
         if st.button("🧭 About Us", use_container_width=True):
             st.switch_page("pages/about_us.py")
 
-    with col_links[1]:
+    with col_links[2]:
         if st.button("👤 Profile", use_container_width=True):
             if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
                 st.warning("Please log in first!")
@@ -138,11 +146,11 @@ with st.container():
                 elif role == "Tutor":
                     st.switch_page("pages/tutor_profile.py")
 
-    with col_links[2]:
+    with col_links[3]:
         if st.button("🎓 Tutors", use_container_width=True):
             st.switch_page("pages/find_tutor.py")
 
-    with col_links[3]:
+    with col_links[4]:
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 

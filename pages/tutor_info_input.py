@@ -16,6 +16,10 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
         st.switch_page("login.py")
     st.stop()
 
+if st.session_state["role"] != "Tutor":
+    st.warning("This page is for tutors only.")
+    st.stop()
+
 load_dotenv()
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
