@@ -16,7 +16,7 @@ load_dotenv()
 # Page setup
 st.set_page_config(page_title="About Us | TutorConnect", layout="wide")
 
-role = st.session_state.get('role', '') or ''
+# role = st.session_state.get('role', '') or ''
 
 # Page styling
 st.markdown("""
