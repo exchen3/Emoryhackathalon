@@ -77,7 +77,7 @@ with st.container():
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 
-st.title("Student Profile")
+st.title("🧑 Student Profile")
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST","localhost")
@@ -174,9 +174,9 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Profile content
-st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
-st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+# # Profile content
+# st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
+# st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
 
 def render_field(label, value):
     st.markdown(f'<div class="profile-field"><strong>{label}:</strong> {value}</div>', unsafe_allow_html=True)

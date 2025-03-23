@@ -16,10 +16,6 @@ if st.session_state["role"] != "Tutor":
     st.warning("This site can be only accessed by tutors.")
     st.stop()
 
-
-# Set page config
-st.set_page_config(page_title="Tutor Profile", layout="centered")
-
 username = st.session_state["username"]
 
 def logout():
