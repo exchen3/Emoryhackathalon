@@ -54,4 +54,21 @@ CREATE TABLE requests (
     FOREIGN KEY (tutor_user_id) REFERENCES tutor(user_id)
 );
 
-select * from requests;
+select * from tutor;
+
+ALTER TABLE tutor
+DROP COLUMN price_per_hour;
+
+ALTER TABLE tutor
+ADD COLUMN price_per_hour ENUM(
+    'under 20',
+    '20-30',
+    '30-40',
+    '40-50',
+    '50-60',
+    '60-70',
+    '70-80',
+    '80-90',
+    '90-100',
+    'over 100'
+) DEFAULT NULL;

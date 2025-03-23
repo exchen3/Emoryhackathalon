@@ -11,6 +11,8 @@ import subprocess
 import base64
 
 load_dotenv()
+# Page configuration
+st.set_page_config(page_title="Student Profile", layout="centered")
 
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
@@ -21,6 +23,7 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
 
 if st.session_state["role"] != "Student":
     st.warning("This site can be only accessed by students.")
+    st.stop()
 
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -31,9 +34,6 @@ schema_name = "emoryhackathon"
 # Construct the SQLAlchemy engine
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
 username = st.session_state["username"]
-
-# Page configuration
-st.set_page_config(page_title="Student Profile", layout="centered")
 
 retrieve_query = text(f"SELECT * FROM student WHERE user_id = '{username}'")
 with engine.connect() as conn:

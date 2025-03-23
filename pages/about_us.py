@@ -16,7 +16,7 @@ load_dotenv()
 # Page setup
 st.set_page_config(page_title="About Us | TutorConnect", layout="wide")
 
-# role = st.session_state.get('role', '') or ''
+role = st.session_state.get('role', '') or ''
 
 # Page styling
 st.markdown("""
@@ -127,10 +127,16 @@ with st.container():
 
     with col_links[1]:
         if st.button("👤 Profile", use_container_width=True):
-            if role == "Student":
-                st.switch_page("pages/student_profile.py")
-            elif role == "Tutor":
-                st.switch_page("pages/tutor_profile.py")
+            if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+                st.warning("Please log in first!")
+                time.sleep(1)
+                st.switch_page("login.py")
+            else:
+                role = st.session_state.get("role")
+                if role == "Student":
+                    st.switch_page("pages/student_profile.py")
+                elif role == "Tutor":
+                    st.switch_page("pages/tutor_profile.py")
 
     with col_links[2]:
         if st.button("🎓 Tutors", use_container_width=True):
@@ -187,12 +193,3 @@ for col, member in zip(cols, team):
                 <p style="color: #000000;">{member['role']}</p>
             </div>
         """, unsafe_allow_html=True)
-
-# Back to home
-st.markdown("""
-<div class="text-center mt-5">
-    <a href="#" class="btn btn-primary btn-lg">Back to Home</a>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)  # close overlay

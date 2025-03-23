@@ -21,7 +21,9 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
         st.switch_page("login.py")
     st.stop()
 
-role = st.session_state.get('role', '') or ''
+if st.session_state["role"] != "Student":
+    st.warning("This site can be only accessed by students.")
+    st.stop()
 
 # Custom CSS (basic styles mimicking your HTML)
 st.markdown("""
@@ -29,6 +31,13 @@ st.markdown("""
     html, body {
         font-family: 'Kumbh Sans', sans-serif;
     }
+    
+    .center-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    }
+    
     .navbar {
         background-color: #4B7BE5;
         padding: 1rem 2rem;
@@ -107,10 +116,16 @@ with st.container():
 
     with col_links[1]:
         if st.button("👤 Profile", use_container_width=True):
-            if role == "Student":
-                st.switch_page("pages/student_profile.py")
-            elif role == "Tutor":
-                st.switch_page("pages/tutor_profile.py")
+            if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+                st.warning("Please log in first!")
+                time.sleep(1)
+                st.switch_page("login.py")
+            else:
+                role = st.session_state.get("role")
+                if role == "Student":
+                    st.switch_page("pages/student_profile.py")
+                elif role == "Tutor":
+                    st.switch_page("pages/tutor_profile.py")
 
     with col_links[2]:
         if st.button("🎓 Tutors", use_container_width=True):
@@ -126,8 +141,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 st.markdown("""
 <div class="hero">
     <h1>Unlock Your Full Potential</h1>
-    <p>Personalized tutoring for every learner, anytime, anywhere.</p>
-    <a href="#" class="hero_cta">Find a Tutor</a>
+    <p>Personalized tutoring for every learner. Anytime, anywhere.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -135,19 +149,15 @@ st.markdown("""
 st.markdown("<div class='services'><h2 class='section_title'>Our Tutoring Services</h2></div>", unsafe_allow_html=True)
 
 # ---- Cards ----
-col1, col2, col3 = st.columns(3)
+col1, = st.columns(1)
 
 with col1:
     st.image("https://www.the74million.org/wp-content/uploads/2024/01/tutor-one-on-one.jpg", use_column_width=True)
     st.subheader("One-on-One Tutoring")
     st.write("Work directly with a professional tutor who tailors lessons to your individual needs and pace.")
 
-with col2:
-    st.image("https://images.unsplash.com/photo-1522075469751-3a6694fb2f61", use_column_width=True)
-    st.subheader("Group Sessions")
-    st.write("Join small interactive study groups to learn collaboratively and stay motivated with peers.")
+center_col1, center_col2, center_col3 = st.columns([1, 2, 1])
 
-with col3:
-    st.image("https://images.unsplash.com/photo-1607746882042-944635dfe10e", use_column_width=True)
-    st.subheader("Online Resources")
-    st.write("Access a wide library of lessons, quizzes, and study guides to support your learning journey anytime.")
+with center_col2:
+    if st.button("FIND A TUTOR", use_container_width=True):
+        st.switch_page("pages/find_tutor.py")
