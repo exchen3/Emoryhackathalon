@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import time
 
 st.set_page_config(page_title="Tutor Profile", layout="wide")
+load_dotenv()
 
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("Please log in first!")
@@ -69,8 +70,8 @@ with st.container():
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 
+st.title("🧑 Tutor Profile")
 
-load_dotenv()
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST","localhost")
@@ -160,10 +161,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
-
-# Profile Card
-st.markdown('<div class="profile-header">Tutor Profile</div>', unsafe_allow_html=True)
+# # Profile Card
+# st.markdown('<div class="profile-header">Tutor Profile</div>', unsafe_allow_html=True)
 
 # Render each profile field
 def render_field(label, value):

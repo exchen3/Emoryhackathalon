@@ -16,7 +16,7 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.stop()
 
 if st.session_state["role"] == "Tutor":
-    st.warning("This page is for students only.")
+    st.warning("This page can only be accessed by students.")
     st.stop()
 
 username = st.session_state["username"]
