@@ -31,7 +31,7 @@ def logout():
 
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
-st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+# st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
 
 # Use Streamlit's built-in page links for navigation
 with st.container():

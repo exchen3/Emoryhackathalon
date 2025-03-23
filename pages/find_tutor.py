@@ -31,7 +31,7 @@ engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3
 
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
-st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+# st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
 
 def logout():
     # Clear session state

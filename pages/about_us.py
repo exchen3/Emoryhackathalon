@@ -14,7 +14,7 @@ import time
 load_dotenv()
 
 # Page setup
-st.set_page_config(page_title="About Us | TutorConnect", layout="wide")
+st.set_page_config(page_title="About Us", layout="wide")
 
 # role = st.session_state.get('role', '') or ''
 
@@ -115,7 +115,7 @@ def logout():
 
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
-st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+# st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
 
 # Use Streamlit's built-in page links for navigation
 with st.container():
