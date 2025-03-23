@@ -90,30 +90,30 @@ st.markdown("""
 
     html, body, .stApp {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
         background-size: cover;
     }
 
     .navbar {
         background-color: #0d6efd;
-        padding: 1rem 2rem;
-        border-radius: 10px;
         color: white;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
         display: flex;
         justify-content: space-between;
-        margin-bottom: 2rem;
+        align-items: center;
     }
 
     .navbar a {
         color: white;
-        margin-left: 1.5rem;
         text-decoration: none;
+        margin-left: 1.5rem;
         font-weight: bold;
     }
 
     .profile-container {
         max-width: 720px;
-        margin: 40px auto;
+        margin: 0 auto;
         background: rgba(255, 255, 255, 0.75);
         padding: 2rem;
         border-radius: 12px;
@@ -122,9 +122,9 @@ st.markdown("""
 
     .profile-header {
         text-align: center;
-        font-size: 2.2rem;
-        color: #0d6efd;
+        font-size: 2.5rem;
         margin-bottom: 2rem;
+        color: #0d6efd;
     }
 
     .profile-field {
@@ -132,29 +132,23 @@ st.markdown("""
         font-size: 1.1rem;
     }
 
-    .profile-field strong {
-        color: #333;
+    .edit-btn {
+        display: block;
+        margin: 2rem auto 0;
+        text-align: center;
+        background: #0d6efd;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
     }
-
     </style>
 """, unsafe_allow_html=True)
 
-# Navbar
-st.markdown("""
-<div class="navbar">
-    <div><strong>TutorConnect</strong></div>
-    <div>
-        <a href="#">About Us</a>
-        <a href="#">Profile</a>
-        <a href="#">Tutors</a>
-        <a href="#">Subjects</a>
-        <a href="#">Sign Out</a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+
 
 # Profile Card
-st.markdown('<div class="profile-container">', unsafe_allow_html=True)
 st.markdown('<div class="profile-header">Tutor Profile</div>', unsafe_allow_html=True)
 
 # Render each profile field
