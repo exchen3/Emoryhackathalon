@@ -14,6 +14,7 @@ import time
 load_dotenv()
 # Page configuration
 st.set_page_config(page_title="Student Profile", layout="wide")
+st.title("Student Profile")
 
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
