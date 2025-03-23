@@ -2,6 +2,7 @@ import streamlit as st
 from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
+import hashlib
 import time
 
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
