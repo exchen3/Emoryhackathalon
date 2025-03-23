@@ -28,6 +28,16 @@ engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
 st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
 
+def logout():
+    # Clear session state
+    for key in ["logged_in", "username", "role"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    
+    st.success("You have been logged out.")
+    time.sleep(1)
+    st.switch_page("login.py")  # Navigate to login page
+    
 # Use Streamlit's built-in page links for navigation
 with st.container():
     col_links = st.columns(4)
@@ -63,6 +73,10 @@ with st.container():
                     st.warning("You cannot access this site as a tutor!")
                     time.sleep(1)
                     st.switch_page("login.py")
+
+    with col_links[3]:
+        if st.button("🚪 Sign Out", use_container_width=True):
+            logout()
 
 # Get distinct majors from the tutor table
 def get_majors():
