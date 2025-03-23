@@ -2,6 +2,7 @@ import streamlit as st
 from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
+import time
 
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("Please log in first!")
@@ -13,6 +14,16 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
 if st.session_state["role"] != "Tutor":
     st.warning("This site can be only accessed by tutors.")
     st.stop()
+
+def logout():
+    # Clear session state
+    for key in ["logged_in", "username", "role"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    
+    st.success("You have been logged out.")
+    time.sleep(1)
+    st.switch_page("login.py")  # Navigate to login page
 
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
