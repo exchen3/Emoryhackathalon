@@ -153,17 +153,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ---- Services Section ----
-st.markdown("<div class='services'><h2 class='section_title'>Our Tutoring Services</h2></div>", unsafe_allow_html=True)
-
-# ---- Cards ----
-col1, = st.columns(1)
-
-with col1:
-    st.image("https://www.the74million.org/wp-content/uploads/2024/01/tutor-one-on-one.jpg", use_column_width=True)
-    st.subheader("One-on-One Tutoring")
-    st.write("Work directly with a professional tutor who tailors lessons to your individual needs and pace.")
-
 center_col1, center_col2, center_col3 = st.columns([1, 2, 1])
 
 with center_col2:
