@@ -109,6 +109,22 @@ def personal_information(user_id=username):
         value=current_info.get("classes_teaching"), 
         key="classes_teaching"
     )
+    price_options = ['under 20',
+                    '20-30',
+                    '30-40',
+                    '40-50',
+                    '50-60',
+                    '60-70',
+                    '70-80',
+                    '80-90',
+                    '90-100',
+                    'over 100']
+    price_per_hour = st.selectbox(
+        "Choose the ideal price range",
+        price_options,
+        index= price_options.index(current_info.get("gpa_range")) if current_info.get("price_per_hour") in gpa_options else 0,
+        key = "price_per_hour"
+    )
     bio = st.text_area(
         "Write a short bio about yourself", 
         value=current_info.get("bio"), 
@@ -118,7 +134,7 @@ def personal_information(user_id=username):
     # Submit updated info
     if st.button("Submit Information"):
         # Check required fields
-        if not university or university == "empty" or not classes_teaching or classes_teaching == "empty" or not bio or bio == "empty":
+        if not university or university == "empty" or not classes_teaching or classes_teaching == "empty" or not bio or bio == "empty" or not price_per_hour or price_per_hour == "empty":
             st.warning("Please fill in all required fields.")
             return
 
@@ -156,7 +172,7 @@ def personal_information(user_id=username):
                 conn.commit()
                 st.success("Personal Information Updated!")
                 
-                st.page_link("pages/student_info_input.py", label="Go to Student Personal Information page")
+                st.page_link("pages/tutor_info_input.py", label="Go to Student Personal Information page")
 
                 # st.markdown('<meta http-equiv="refresh" content="0; url=http://localhost:8501/student_home_page.html">', unsafe_allow_html=True)
 
