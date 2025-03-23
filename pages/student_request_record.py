@@ -3,6 +3,12 @@ from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
 
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("Please log in first!")
+    if st.button("Login Page", use_container_width=True):
+        st.switch_page("login.py")
+    st.stop()
+    
 # Check login status
 if st.session_state["role"] != "Student":
     st.warning("This page is only accessible by students.")
