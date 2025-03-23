@@ -145,7 +145,7 @@ st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
 
 # Use Streamlit's built-in page links for navigation
 with st.container():
-    col_links = st.columns(5)
+    col_links = st.columns(7)
 
     with col_links[0]:
         if st.button("🏠 Home", use_container_width=True):
@@ -163,6 +163,7 @@ with st.container():
         if st.button("👤 Profile", use_container_width=True):
             if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
                 st.warning("Please log in first!")
+                time.sleep(1)
                 st.switch_page("login.py")
             else:
                 role = st.session_state.get("role")
@@ -176,6 +177,14 @@ with st.container():
             st.switch_page("pages/find_tutor.py")
 
     with col_links[4]:
+        if st.button("📌 Request List", use_container_width=True):
+            st.switch_page("pages/student_request_record.py")
+
+    with col_links[5]:
+        if st.button("✅ Request Completion", use_container_width=True):
+            st.switch_page("pages/student_completeness_status.py")
+
+    with col_links[6]:
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 
