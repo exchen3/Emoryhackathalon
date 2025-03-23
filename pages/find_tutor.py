@@ -1,14 +1,7 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
-import hashlib
-import subprocess
-import base64
 
 load_dotenv()
 
@@ -37,23 +30,65 @@ def get_majors():
         majors = [row[0] for row in result.fetchall()]
         return ["All"] + majors  # Add "All" option to show all tutors
 
-# Get tutors based on selected major
-def get_tutors(selected_major):
+def get_universities():
     with engine.connect() as conn:
-        if selected_major == "All":
-            result = conn.execute(text("SELECT user_id, name, university, graduation_year, major, classes_teaching, bio, email FROM tutor"))
-        else:
-            result = conn.execute(text("SELECT * FROM tutor WHERE major = :major"), {"major": selected_major})
-        return result.fetchall()
+        result = conn.execute(text("SELECT DISTINCT university FROM tutor"))
+        universities = [row[0] for row in result.fetchall()]
+        return ["All"] + universities
+
+def get_price_ranges():
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT DISTINCT price_per_hour FROM tutor"))
+        price_ranges = [row[0] for row in result.fetchall()]
+        return ["All"] + price_ranges
+
+# Get tutors based on selected major
+def get_tutors(selected_major_, selected_university_, selected_price_range_):
+    with engine.connect() as conn:
+        query = "SELECT user_id, name, university, graduation_year, major, classes_teaching, bio, email, price_per_hour FROM tutor WHERE 1=1"
+        if selected_major_ != "All":
+            query += f" AND major = '{selected_major_}'"
+        if selected_university_ != "All":
+            query += f" AND university = '{selected_university_}'"
+        if selected_price_range_ != "All":
+            query += f" AND price_per_hour = {selected_price_range_}"
+
+        text_query = text(query)
+        result = conn.execute(text_query).fetchall()
+        return result
+
+# Function to check if a request already exists
+def request_exists(student_id, tutor_id):
+    with engine.connect() as conn:
+        result = conn.execute(text("""
+            SELECT COUNT(*) FROM requests
+            WHERE student_user_id = :student_id AND tutor_user_id = :tutor_id
+        """), {"student_id": student_id, "tutor_id": tutor_id}).scalar()
+    return result > 0  # Returns True if request exists, False otherwise
+
+# Function to send a tutoring request
+def send_tutoring_request(student_id, tutor_id, message):
+    if request_exists(student_id, tutor_id):
+        st.warning("❗ You have already sent a request to this tutor.")
+    else:
+        with engine.connect() as conn:
+            conn.execute(text("""
+                INSERT INTO requests (student_user_id, tutor_user_id, status, message)
+                VALUES (:student_id, :tutor_id, 'pending', :message)
+            """), {"student_id": student_id, "tutor_id": tutor_id, "message": message})
+            conn.commit()
+        st.success(f"✅ Request sent to {tutor_id}!")
 
 # Streamlit UI
 st.title("🎓 Finding a Tutor")
 
 # 1️⃣ Student selects a major (question category)
 selected_major = st.selectbox("🔍 Select a Major", get_majors(), key="select_major")
+selected_university = st.selectbox("🔍 Select a University", get_universities(), key="select_university")
+selected_price_range = st.selectbox("🔍 Select a Price Range", get_price_ranges(), key="select_price_range")
 
 # 2️⃣ Show tutors who match the major
-tutors = get_tutors(selected_major)
+tutors = get_tutors(selected_major, selected_university, selected_price_range)
 
 st.subheader("📌 Available Tutors")
 
@@ -61,7 +96,7 @@ if not tutors:
     st.info("No tutors found.")
 else:
     for tutor in tutors:
-        tutor_id, name, university, grad_year, major, classes_teaching, bio, email = tutor
+        tutor_id, name, university, grad_year, major, classes_teaching, bio, email, price_per_hour = tutor
 
         with st.expander(f"🔹 {name} — {university or 'N/A'} ({grad_year or 'N/A'})"):
             st.markdown(f"📚 **Major:** {major or 'N/A'}")
@@ -85,17 +120,4 @@ else:
                 elif not message.strip():
                     st.warning("Please write a message before submitting your request.")
                 else:
-                    try:
-                        with engine.connect() as conn:
-                            conn.execute(text("""
-                                INSERT INTO requests (student_user_id, tutor_user_id, status, message)
-                                VALUES (:student_id, :tutor_id, 'pending', :message)
-                            """), {
-                                "student_id": student_id,
-                                "tutor_id": tutor_id,
-                                "message": message
-                            })
-                            conn.commit()
-                        st.success(f"✅ Request with message sent to {name}!")
-                    except Exception as e:
-                        st.error(f"Database error: {e}")
+                    send_tutoring_request(student_id, tutor_id, message)
