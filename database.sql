@@ -54,7 +54,7 @@ CREATE TABLE requests (
     FOREIGN KEY (tutor_user_id) REFERENCES tutor(user_id)
 );
 
-select * from tutor;
+select * from student;
 
 ALTER TABLE tutor
 DROP COLUMN price_per_hour;
@@ -75,3 +75,5 @@ ADD COLUMN price_per_hour ENUM(
 
 ALTER TABLE requests
 ADD COLUMN completed BOOLEAN DEFAULT FALSE;
+
+select * from tutor;
