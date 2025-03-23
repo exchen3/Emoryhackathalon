@@ -21,7 +21,9 @@ def logout():
         time.sleep(1)
         st.switch_page("login.py")
     else:
-        st.warning("You are not logged in!")
+        st.warning("Please log in first!")
+        time.sleep(1)
+        st.switch_page("login.py")
 
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
