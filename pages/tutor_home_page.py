@@ -148,7 +148,7 @@ with st.container():
 st.markdown("""
 <div class="hero">
     <h1>Start Your Career Now</h1>
-    <p>Personalized Experience for Every Employee. Anytime, Anywhere.</p>
+    <p>Personalized Experience for Every Tutor. Anytime, Anywhere.</p>
 </div>
 """, unsafe_allow_html=True)
 
