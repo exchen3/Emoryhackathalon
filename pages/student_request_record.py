@@ -41,8 +41,6 @@ def get_student_requests(student_id):
     
     return result
 
-# Streamlit UI
-st.title("📌 Your Tutoring Requests")
 
 # Page styling
 st.markdown("""
@@ -129,6 +127,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Streamlit UI
+st.title("📌 Your Tutoring Requests")
 
 def logout():
     # Clear session state
