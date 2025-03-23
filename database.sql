@@ -72,3 +72,5 @@ ADD COLUMN price_per_hour ENUM(
 
 ALTER TABLE requests
 ADD COLUMN completed BOOLEAN DEFAULT FALSE;
+
+select * from requests;
