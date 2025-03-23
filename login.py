@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
 import hashlib
-import subprocess
+import time
 
 load_dotenv()
 
@@ -22,6 +22,46 @@ schema_name = "emoryhackathon"
 # print("DB_USERNAME =", os.getenv("DB_USERNAME"))
 # print("DB_PASSWORD =", os.getenv("DB_PASSWORD"))
 # print("DB_HOST =", os.getenv("DB_HOST"))
+
+# ---- Navbar ----
+st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
+st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+
+# Use Streamlit's built-in page links for navigation
+with st.container():
+    col_links = st.columns(4)
+
+    with col_links[0]:
+        if st.button("🧭 About Us", use_container_width=True):
+            st.switch_page("pages/about_us.py")
+
+    with col_links[1]:
+        if st.button("👤 Profile", use_container_width=True):
+            if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+                st.warning("Please log in first!")
+                time.sleep(1)
+                st.switch_page("login.py")
+            else:
+                role = st.session_state.get("role")
+                if role == "Student":
+                    st.switch_page("pages/student_profile.py")
+                elif role == "Tutor":
+                    st.switch_page("pages/tutor_profile.py")
+
+    with col_links[2]:
+        if st.button("🎓 Tutors", use_container_width=True):
+            if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+                st.warning("Please log in first!")
+                time.sleep(1)
+                st.switch_page("login.py")
+            else:
+                role = st.session_state.get("role")
+                if role == "Student":
+                    st.switch_page("pages/find_tutor.py")
+                elif role == "Tutor":
+                    st.warning("You cannot access this site as a tutor!")
+                    time.sleep(1)
+                    st.switch_page("login.py")
 
 # Construct the SQLAlchemy engine
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")

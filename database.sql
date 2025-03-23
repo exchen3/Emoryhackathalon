@@ -72,3 +72,6 @@ ADD COLUMN price_per_hour ENUM(
     '90-100',
     'over 100'
 ) DEFAULT NULL;
+
+ALTER TABLE requests
+ADD COLUMN completed BOOLEAN DEFAULT FALSE;

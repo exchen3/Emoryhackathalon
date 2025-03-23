@@ -140,7 +140,7 @@ with st.container():
 
     with col_links[2]:
         if st.button("🎓 Tutors", use_container_width=True):
-            st.switch_page("pages/student_tutor_matching_filtering.py")
+            st.switch_page("pages/find_tutor.py")
 
     with col_links[3]:
         if st.button("🚪 Sign Out", use_container_width=True):
