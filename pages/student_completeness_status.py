@@ -116,7 +116,7 @@ request_categories = {
 }
 
 if not requests:
-    st.info("No tutoring requests sent yet.")
+    st.info("You haven't sent any tutoring requests yet.")
 else:
     for category, req_list in request_categories.items():
         with st.expander(category, expanded=False):

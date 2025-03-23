@@ -28,43 +28,15 @@ schema_name = "emoryhackathon"
 
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
-st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
+# st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
 
 # Use Streamlit's built-in page links for navigation
 with st.container():
-    col_links = st.columns(4)
-
-    with col_links[0]:
-        if st.button("🧭 About Us", use_container_width=True):
-            st.switch_page("pages/about_us.py")
+    col_links = st.columns(3)
 
     with col_links[1]:
-        if st.button("👤 Profile", use_container_width=True):
-            if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
-                st.warning("Please log in first!")
-                time.sleep(1)
-                st.switch_page("login.py")
-            else:
-                role = st.session_state.get("role")
-                if role == "Student":
-                    st.switch_page("pages/student_profile.py")
-                elif role == "Tutor":
-                    st.switch_page("pages/tutor_profile.py")
-
-    with col_links[2]:
-        if st.button("🎓 Tutors", use_container_width=True):
-            if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
-                st.warning("Please log in first!")
-                time.sleep(1)
-                st.switch_page("login.py")
-            else:
-                role = st.session_state.get("role")
-                if role == "Student":
-                    st.switch_page("pages/find_tutor.py")
-                elif role == "Tutor":
-                    st.warning("You cannot access this site as a tutor!")
-                    time.sleep(1)
-                    st.switch_page("login.py")
+        if st.button("🧭 About Us", use_container_width=True):
+            st.switch_page("pages/about_us.py")
 
 # Construct the SQLAlchemy engine
 engine = create_engine(f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{schema_name}?host={DB_HOST}")
@@ -115,7 +87,7 @@ def login():
                                 st.switch_page("pages/student_home_page.py")
                         elif role == "Tutor":
                             check_query = text(
-                                f"SELECT email IS NULL FROM student WHERE user_id = '{st.session_state['username']}'"
+                                f"SELECT email IS NULL FROM tutor WHERE user_id = '{st.session_state['username']}'"
                             )
                             is_empty = conn.execute(check_query).fetchone()
                             if is_empty and is_empty[0]:
