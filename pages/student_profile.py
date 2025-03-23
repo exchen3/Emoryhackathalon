@@ -14,7 +14,6 @@ import time
 load_dotenv()
 # Page configuration
 st.set_page_config(page_title="Student Profile", layout="wide")
-st.title("Student Profile")
 
 # Ensure user is logged in
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
@@ -78,6 +77,7 @@ with st.container():
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 
+st.title("Student Profile")
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST","localhost")
