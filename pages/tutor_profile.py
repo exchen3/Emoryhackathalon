@@ -35,7 +35,7 @@ st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
 
 # Use Streamlit's built-in page links for navigation
 with st.container():
-    col_links = st.columns(5)
+    col_links = st.columns(4)
 
     with col_links[0]:
         if st.button("🏠 Home", use_container_width=True):
@@ -63,10 +63,6 @@ with st.container():
                     st.switch_page("pages/tutor_profile.py")
 
     with col_links[3]:
-        if st.button("🎓 Tutors", use_container_width=True):
-            st.switch_page("pages/find_tutor.py")
-
-    with col_links[4]:
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 

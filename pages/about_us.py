@@ -62,14 +62,20 @@ st.markdown("""
     }
 
     .team-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* This centers content vertically */
     text-align: center;
     padding: 2rem 1rem;
     border-radius: 12px;
     background: white;
     box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
-    color: black; /* 👈 Add this */
+    color: black;
+    height: 100%; /* Ensures uniform height if needed */
     }
+
 
     .team-card:hover {
         transform: translateY(-5px);
@@ -197,7 +203,9 @@ for col, member in zip(cols, team):
         st.markdown(f"""
             <div class="team-card">
                 <img src="{member['img']}" alt="{member['name']}"/>
-                <h5 style="color: #000000;">{member['name']}</h5>
-                <p style="color: #000000;">{member['role']}</p>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <h5 style="color: #000000; margin: 0.5rem 0 0.25rem 0;">{member['name']}</h5>
+                    <p style="color: #000000; font-weight: 500; margin: 0;">{member['role']}</p>
+                </div>
             </div>
         """, unsafe_allow_html=True)
