@@ -111,7 +111,7 @@ def get_tutors(selected_major_, selected_university_, selected_price_range_):
         if selected_university_ != "All":
             query += f" AND university = '{selected_university_}'"
         if selected_price_range_ != "All":
-            query += f" AND price_per_hour = {selected_price_range_}"
+            query += f" AND price_per_hour = '{selected_price_range_}'"
         
         text_query = text(query)
         result = conn.execute(text_query).fetchall()
