@@ -11,14 +11,17 @@ load_dotenv()
 st.set_page_config(page_title="About Us", layout="wide")
 
 def logout():
-    # Clear session state
-    for key in ["logged_in", "username", "role"]:
-        if key in st.session_state:
-            del st.session_state[key]
-    
-    st.success("You have been logged out.")
-    time.sleep(1)
-    st.switch_page("login.py")  # Navigate to login page
+    if "logged_in" in st.session_state and st.session_state["logged_in"]:
+        # Clear session state
+        for key in ["logged_in", "username", "role"]:
+            if key in st.session_state:
+                del st.session_state[key]
+        
+        st.success("You have been logged out.")
+        time.sleep(1)
+        st.switch_page("login.py")
+    else:
+        st.warning("You are not logged in!")
 
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
