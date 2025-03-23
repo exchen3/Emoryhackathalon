@@ -22,14 +22,15 @@ The platform supports:
 ## 🚀 Features
 
 ### 🎓 For Students:
-- View and edit your profile
-- Browse and filter tutors by subject, school, or hourly rate
+- Complete, view, and edit your profile
+- Browse and filter tutors by categories such as subject, school, or hourly rate range
 - Send tutoring requests with a personalized message
 - Track status of each request (pending, accepted, rejected)
-- View completion progress with each tutor
+- View request progress for each student
+  
 
 ### 📘 For Tutors:
-- Complete and update your tutoring profile
+- Complete, view, and edit your profile
 - View incoming tutoring requests from students
 - Accept or reject requests
 - Track completed tutoring sessions
