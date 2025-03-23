@@ -23,7 +23,7 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.stop()
 
 if st.session_state["role"] != "Student":
-    st.warning("This site can be only accessed by students.")
+    st.warning("This page can only be accessed by students.")
     st.stop()
 
 def logout():

@@ -11,7 +11,7 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     
 # Check login status
 if st.session_state["role"] != "Student":
-    st.warning("This page is only accessible by students.")
+    st.warning("This page can only be accessed by students.")
     st.stop()
 
 load_dotenv()
