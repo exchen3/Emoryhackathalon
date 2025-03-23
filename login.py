@@ -119,6 +119,7 @@ def login():
                                 st.switch_page("pages/tutor_info_input.py")
                             else:
                                 st.switch_page("pages/tutor_home_page.py")
+                    else:    
                         st.error("Invalid username or password.")
         except Exception as e:
             st.error(f"Database error: {e}")
