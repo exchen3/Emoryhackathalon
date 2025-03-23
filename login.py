@@ -111,8 +111,14 @@ def login():
                             else:
                                 st.switch_page("pages/student_home_page.py")
                         elif role == "Tutor":
-                            st.switch_page("pages/tutor_info_input.py")
-                    else:
+                            check_query = text(
+                                f"SELECT email IS NULL FROM student WHERE user_id = '{st.session_state['username']}'"
+                            )
+                            is_empty = conn.execute(check_query).fetchone()
+                            if is_empty and is_empty[0]:
+                                st.switch_page("pages/tutor_info_input.py")
+                            else:
+                                st.switch_page("pages/tutor_home_page.py")
                         st.error("Invalid username or password.")
         except Exception as e:
             st.error(f"Database error: {e}")
