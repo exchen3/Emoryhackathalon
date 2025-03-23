@@ -248,7 +248,7 @@ def personal_information(user_id=username):
                 conn.commit()
                 st.success("Personal Information Updated!")
                 
-                st.page_link("pages/tutor_info_input.py", label="Go to Tutor Personal Information page")
+                st.page_link("pages/tutor_home_page.py", label="Go to Tutor Home Page")
 
                 # st.markdown('<meta http-equiv="refresh" content="0; url=http://localhost:8501/student_home_page.html">', unsafe_allow_html=True)
 

@@ -219,7 +219,7 @@ def personal_information(user_id=username):
 
                 conn.commit()
                 st.success("Personal Information Updated!")
-                st.page_link("pages/student_home_page.py", label="Go to Student Personal Information page")
+                st.page_link("pages/student_home_page.py", label="Go to Student Home Page")
 
                 # Display the HTML as full-page content
 
