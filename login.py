@@ -110,13 +110,14 @@ def register():
 
                 # Insert new user
                 insert_query = text(f"""
-                    INSERT INTO {new_role} (user_id, password, name )
-                    VALUES (:username, :password, :user_name)
+                    INSERT INTO {new_role} (user_id, password, name,major)
+                    VALUES (:username, :password, :user_name, :major)
                 """)
                 conn.execute(insert_query, {
                     "username": new_username,
                     "password": hashed_password,
-                    "user_name": new_full_name
+                    "user_name": new_full_name,
+                    "major": "Undeclared"
                 })
 
                 conn.commit()
