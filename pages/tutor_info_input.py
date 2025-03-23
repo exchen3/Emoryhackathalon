@@ -75,7 +75,20 @@ def personal_information(user_id=username):
         value=current_info.get("graduation_year"), 
         key="grad_year"
     )
-    majors = ["Computer Science", "Biology", "Business", "Engineering", "Psychology", "Other"]
+    majors = [
+        "Biology", "Chemistry", "Physics", "Mathematics", "Statistics",
+        "Computer Science", "Data Science", "Engineering", "Psychology",
+        "Economics", "Business", "Finance", "Accounting", "Marketing",
+        "History", "Political Science", "Philosophy", "Sociology", "Anthropology",
+        "English", "Linguistics", "Education", "Communication", "Journalism",
+        "Law", "Criminal Justice", "Public Policy",
+        "Medicine", "Nursing", "Public Health", "Pharmacy", "Neuroscience",
+        "Environmental Science", "Geology", "Astronomy", "Agricultural Science",
+        "Art", "Music", "Theater", "Film Studies", "Graphic Design",
+        "Sports Management", "Kinesiology",
+        "Other"
+    ]
+
     major = st.selectbox(
         "Select your Major", 
         majors, 
