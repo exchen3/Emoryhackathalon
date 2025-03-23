@@ -94,7 +94,7 @@ with st.container():
             logout()
 
 # Streamlit UI
-st.title("📌 My Tutoring Requests")
+st.title("✅ Tutor Requests Completion Status")
 
 requests = get_student_requests(username)
 

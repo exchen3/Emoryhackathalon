@@ -180,7 +180,7 @@ with st.container():
         if st.button("🚪 Sign Out", use_container_width=True):
             logout()
 
-st.title("📌 Your Tutoring Requests")
+st.title("📌 Requests Sent to Tutors")
 requests = get_student_requests(username)
 
 # Categorize requests

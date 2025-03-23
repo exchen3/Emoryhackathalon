@@ -107,7 +107,7 @@ def update_completion_status(request_id, new_status):
         conn.commit()
 
 # Streamlit UI
-st.title("✅ Completion Status of Tutoring Requests")
+st.title("✅ Tutor Requests Completion Status")
 
 requests = get_accepted_requests(username)
 

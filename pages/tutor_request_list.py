@@ -108,7 +108,7 @@ def update_request_status(request_id, new_status):
         conn.commit()
 
 # Streamlit UI
-st.title("📌 Tutoring Requests")
+st.title("📌 Requests Received by Tutors")
 
 requests = get_tutoring_requests(username)
 
