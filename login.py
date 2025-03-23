@@ -22,6 +22,10 @@ schema_name = "emoryhackathon"
 # print("DB_PASSWORD =", os.getenv("DB_PASSWORD"))
 # print("DB_HOST =", os.getenv("DB_HOST"))
 
+st.markdown("""
+<h1 style='text-align: center;'>TutorConnect</h1>
+""", unsafe_allow_html=True)
+
 # ---- Navbar ----
 st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
 # st.markdown('<div class="navbar-title">TutorConnect</div>', unsafe_allow_html=True)
